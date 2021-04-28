@@ -1,0 +1,21 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:rich="http://richfaces.org/rich">
+
+<h:head>
+    <title>login</title>
+    <link href="css/login.css" rel="stylesheet" type="text/css" />
+</h:head>
+<h:body>
+    <div class="center">
+        <h:form id="form-login">
+            <div class="p-field p-col-12 p-md-4">
+                <p:growl id="msg" for="loginMsg" showDetail="true" autoUpdate="true" />
+                <p:outputLabel value="Your name:" />
+                <p:inputText class="inputTexth" value="#{user.fullName}" scrollHeight="250" />
+                <p:commandButton class="buttonLogin" value="Login" update="msg" action="#{user.authorizationUser}" />
+                <h:messages class="message"></h:messages>
+            </div>
+        </h:form>
+    </div>
+</h:body>
+
+</html>
