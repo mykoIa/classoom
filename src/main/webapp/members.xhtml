@@ -1,47 +1,40 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 <f:metadata>
-    <f:viewAction action="#{user.checkAuthorization}" />
+    <f:viewAction action="#{userService.redirectToLogin}"/>
 </f:metadata>
 <h:head>
     <title>members</title>
-    <link href="css/members.css" rel="stylesheet" type="text/css" />
+    <h:outputStylesheet library="css" name="members.css"/>
 </h:head>
 <h:body>
-    <navbar class="header">
-        <div class="container">
-            <h:form>
-                <p:menuButton value="Action">
-                    <p:menuitem value="Raise hand up" action="#{user.handUp()}" />
-                    <p:menuitem value="Raise hand down" action="#{user.handDown()}" />
-                </p:menuButton>
-            </h:form>
-            <h:form>
-                <p:menuButton value="#{user.fullName}">
-                    <p:menuitem value="Logout" action="#{user.logOut()}" />
-                </p:menuButton>
-            </h:form>
-        </div>
-    </navbar>
-    <div class="mainBlok">
-        <h3>Class members</h3>
-        <div class="user">
-            <table>
-                <ui:repeat var="userName" value="#{user.userList}" varStatus="status">
-                    <h:panelGroup rendered="#{status.even}">
-                        <tr>
-                            <td>#{userName}</td>
-                        </tr>
-                    </h:panelGroup>
-                    <h:panelGroup rendered="#{status.odd}">
-                        <tr>
-                            <td>#{userName}</td>
-                        </tr>
-                    </h:panelGroup>
-                </ui:repeat>
-            </table>
-        </div>
+    <p:growl widgetVar="globalMessage"/>
+    <h:form id="navbar">
+        <p:menubar>
+            <p:submenu label="Action">
+                <p:menuitem value="#{userService.user.handUp ? 'Raise hand down' : 'Raise hand up'}"
+                            actionListener="#{userService.handUpDown}" update="navbar"/>
+            </p:submenu>
+            <p:submenu label="#{userService.user.fullName}" class="float-right" icon="pi pi-fw pi-user">
+                <p:menuitem value="Logout" action="#{userService.logOut()}" icon="pi pi-fw pi-sign-out"/>
+            </p:submenu>
+        </p:menubar>
+    </h:form>
+    <div class="ui-g">
+        <p:dataTable id="usersTable" var="user" value="#{userService.userList}"
+                     styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
+            <p:column headerText="Class members">
+                <h:outputText value="#{user.fullName}"/>
+            </p:column>
+            <p:column width="15">
+                <h:outputText rendered="#{user.handUp}" styleClass="pi pi-arrow-circle-up"/>
+            </p:column>
+        </p:dataTable>
     </div>
-    <script src="js/script.js"></script>
+    <h:outputScript library="js" name="script.js"/>
+    <f:websocket channel="classroom" onmessage="onmessage">
+        <f:ajax event="updateTable" render="usersTable"/>
+    </f:websocket>
 </h:body>
-
 </html>

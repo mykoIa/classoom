@@ -1,21 +1,24 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui" xmlns:rich="http://richfaces.org/rich">
-
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+    <f:viewAction action="#{userService.redirectToMembers}"/>
+</f:metadata>
 <h:head>
     <title>login</title>
-    <link href="css/login.css" rel="stylesheet" type="text/css" />
+    <h:outputStylesheet library="css" name="login.css"/>
 </h:head>
 <h:body>
-    <div class="center">
-        <h:form id="form-login">
-            <div class="p-field p-col-12 p-md-4">
-                <p:growl id="msg" for="loginMsg" showDetail="true" autoUpdate="true" />
-                <p:outputLabel value="Your name:" />
-                <p:inputText class="inputTexth" value="#{user.fullName}" scrollHeight="250" />
-                <p:commandButton class="buttonLogin" value="Login" update="msg" action="#{user.authorizationUser}" />
-                <h:messages class="message"></h:messages>
-            </div>
-        </h:form>
-    </div>
+    <h:form styleClass="ui-g">
+        <p:growl id="msg" for="loginMsg" showDetail="true"/>
+        <p:outputLabel value="Your name:"
+                       styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+        <p:inputText value="#{userService.user.fullName}"
+                     styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+        <div class="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
+            <p:commandButton value="Login" update="msg" action="#{userService.authorizeUser()}"/>
+        </div>
+    </h:form>
 </h:body>
-
 </html>
