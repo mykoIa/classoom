@@ -47,9 +47,7 @@ public class UserService implements Serializable {
         if (user.isUserAlreadySignedUp()) {
             return MEMBERS_FACES_REDIRECT_TRUE;
         }
-        user.setFullName(user.getFullName().trim());
-        if (user.getFullName().isEmpty()) {
-            setErrorMessage("Login can't be empty");
+        if (loginAndPasswordIsEmpty(user)) {
             return "";
         }
         if (userDB.findUser(user)) {
@@ -70,12 +68,11 @@ public class UserService implements Serializable {
     }
 
     public String authorizeUser() {
-        if (user.getFullName().isEmpty()) {
-            setErrorMessage("Login can't be empty");
+        if (loginAndPasswordIsEmpty(user)) {
             return "";
         }
         if (!userDB.findUser(user)) {
-            setErrorMessage("You are not registered");
+            setErrorMessage("Login or password is incorrect");
             return "";
         }
         user.setUserAlreadySignedUp(true);
@@ -104,6 +101,18 @@ public class UserService implements Serializable {
     private void setErrorMessage(String errorMessage) {
         FacesContext.getCurrentInstance().addMessage("loginMsg",
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", errorMessage));
+    }
+
+    private boolean loginAndPasswordIsEmpty(User user) {
+        if (user.getFullName().isEmpty()) {
+            setErrorMessage("Login can't be empty");
+            return true;
+        }
+        if (user.getPassword().isEmpty()) {
+            setErrorMessage("Password can't be empty");
+            return true;
+        }
+        return false;
     }
 
 }
