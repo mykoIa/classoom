@@ -26,6 +26,7 @@ public class UserService implements Serializable {
     private WebSocket webSocket;
 
     private User user = new User();
+    private String password;
 
     public User getUser() {
         return user;
@@ -39,23 +40,29 @@ public class UserService implements Serializable {
         this.user = new User();
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Collection<User> getUserList() {
         return userDB.getUserList();
     }
 
     public String registrationUser() {
-        if (user.isUserAlreadySignedUp()) {
-            return MEMBERS_FACES_REDIRECT_TRUE;
-        }
         if (loginAndPasswordIsEmpty(user)) {
             return "";
         }
-        if (userDB.findUser(user)) {
+        if (userDB.findUser(user, password)) {
             setErrorMessage("This login is already taken");
             return "";
         }
         user.setUserAlreadySignedUp(true);
-        userDB.addUser(user);
+        userDB.addUser(user, password);
+        password = "";
         webSocket.userConnected(user.getFullName());
         return MEMBERS_FACES_REDIRECT_TRUE;
     }
@@ -71,10 +78,11 @@ public class UserService implements Serializable {
         if (loginAndPasswordIsEmpty(user)) {
             return "";
         }
-        if (!userDB.findUser(user)) {
+        if (!userDB.findUser(user, password)) {
             setErrorMessage("Login or password is incorrect");
             return "";
         }
+        password = "";
         user.setUserAlreadySignedUp(true);
         userDB.updateUser(user, true);
         webSocket.userConnected(user.getFullName());
@@ -108,7 +116,7 @@ public class UserService implements Serializable {
             setErrorMessage("Login can't be empty");
             return true;
         }
-        if (user.getPassword().isEmpty()) {
+        if (password.isEmpty()) {
             setErrorMessage("Password can't be empty");
             return true;
         }
