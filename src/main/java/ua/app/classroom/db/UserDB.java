@@ -11,10 +11,10 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
 import org.jboss.logging.Logger;
 import ua.app.classroom.model.User;
+import ua.app.classroom.util.Encoding;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;
-import java.util.List;
 
 @ApplicationScoped
 public class UserDB {
@@ -44,30 +44,27 @@ public class UserDB {
         }
     }
 
-    public void addUser(User user) {
+    public void addUser(User user, String password) {
         Session session = factory.openSession();
         try {
             session.beginTransaction();
+            user.setPassword(Encoding.encodingPassword(password));
             session.save(user);
             session.getTransaction().commit();
+            user.setPassword("");
         } finally {
             session.close();
         }
     }
 
-    public boolean findUser(User user) {
+    public boolean findUser(User user, String password) {
         Session session = factory.openSession();
         try {
             Criteria criteria = session.createCriteria(User.class);
             criteria.add(Restrictions.eq("fullName", user.getFullName()));
-            criteria.add(Restrictions.eq("password", user.getPassword()));
-            List<User> userList = criteria.list();
-            for (User u : userList) {
-                if (u.getFullName().equals(user.getFullName())) {
-                    return true;
-                }
-            }
-            return false;
+            criteria.add(Restrictions.eq("password", Encoding.encodingPassword(password)));
+            User userDB = (User) criteria.uniqueResult();
+            return userDB != null;
         } finally {
             session.close();
         }
