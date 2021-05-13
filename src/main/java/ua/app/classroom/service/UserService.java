@@ -26,7 +26,6 @@ public class UserService implements Serializable {
     private WebSocket webSocket;
 
     private User user = new User();
-    private boolean userAlreadySignedUp;
 
     public User getUser() {
         return user;
@@ -44,8 +43,8 @@ public class UserService implements Serializable {
         return userDB.getUserList();
     }
 
-    public String authorizeUser() {
-        if (userAlreadySignedUp) {
+    public String registrationUser() {
+        if (user.isUserAlreadySignedUp()) {
             return MEMBERS_FACES_REDIRECT_TRUE;
         }
         user.setFullName(user.getFullName().trim());
@@ -53,29 +52,44 @@ public class UserService implements Serializable {
             setErrorMessage("Login can't be empty");
             return "";
         }
-        if (userDB.isFullNameInUse(user.getFullName())) {
+        if (userDB.findUser(user)) {
             setErrorMessage("This login is already taken");
             return "";
         }
+        user.setUserAlreadySignedUp(true);
         userDB.addUser(user);
-        userAlreadySignedUp = true;
         webSocket.userConnected(user.getFullName());
         return MEMBERS_FACES_REDIRECT_TRUE;
     }
 
     public String logOut() {
-        userDB.removeUser(user);
-        userAlreadySignedUp = false;
+        user.setUserAlreadySignedUp(false);
+        userDB.updateUser(user, false);
         webSocket.userDisconnected(user.getFullName());
         return LOGIN_FACES_REDIRECT_TRUE;
     }
 
+    public String authorizeUser() {
+        if (user.getFullName().isEmpty()) {
+            setErrorMessage("Login can't be empty");
+            return "";
+        }
+        if (!userDB.findUser(user)) {
+            setErrorMessage("You are not registered");
+            return "";
+        }
+        user.setUserAlreadySignedUp(true);
+        userDB.updateUser(user, true);
+        webSocket.userConnected(user.getFullName());
+        return MEMBERS_FACES_REDIRECT_TRUE;
+    }
+
     public String redirectToLogin() {
-        return userAlreadySignedUp ? "" : LOGIN_FACES_REDIRECT_TRUE;
+        return user.isUserAlreadySignedUp() ? "" : LOGIN_FACES_REDIRECT_TRUE;
     }
 
     public String redirectToMembers() {
-        return userAlreadySignedUp ? MEMBERS_FACES_REDIRECT_TRUE : "";
+        return user.isUserAlreadySignedUp() ? MEMBERS_FACES_REDIRECT_TRUE : "";
     }
 
     public void handUpDown() {

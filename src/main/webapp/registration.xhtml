@@ -2,12 +2,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-<f:metadata>
-    <f:viewAction action="#{userService.redirectToMembers}"/>
-</f:metadata>
 <h:head>
-    <title>login</title>
-    <h:outputStylesheet library="css" name="login.css"/>
+    <title>registration</title>
 </h:head>
 <h:body>
     <h:form styleClass="ui-g">
@@ -16,9 +12,13 @@
                        styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
         <p:inputText value="#{userService.user.fullName}"
                      styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+        <p:outputLabel value="Password:"
+                       styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+        <p:password id="toggle" value="#{userService.user.password}" toggleMask="true" redisplay="true"
+                    styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+
         <div class="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
-            <p:commandButton value="Login" update="msg" action="#{userService.authorizeUser()}"/>
-            <p:commandButton value="Registration" action="registration?faces-redirect=true"/>
+            <p:commandButton value="Registration" update="msg" action="#{userService.registrationUser()}"/>
         </div>
     </h:form>
 </h:body>
