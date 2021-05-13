@@ -59,6 +59,8 @@ public class UserDB {
         Session session = factory.openSession();
         try {
             Criteria criteria = session.createCriteria(User.class);
+            criteria.add(Restrictions.eq("fullName", user.getFullName()));
+            criteria.add(Restrictions.eq("password", user.getPassword()));
             List<User> userList = criteria.list();
             for (User u : userList) {
                 if (u.getFullName().equals(user.getFullName())) {
@@ -85,22 +87,16 @@ public class UserDB {
     public void updateUser(User user, boolean onlineStatus) {
         Session session = factory.openSession();
         Transaction tx = null;
-        LOG.info("Start user update method ");
         try {
             tx = session.beginTransaction();
             Criteria criteria = session.createCriteria(User.class);
-            LOG.info("Before change");
             criteria.add(Restrictions.eq("fullName", user.getFullName()));
             User e = (User) criteria.uniqueResult();
-            LOG.info("Create user");
             e.setUserAlreadySignedUp(onlineStatus);
-            LOG.info("Set status");
             session.saveOrUpdate(e);
-            LOG.info("Save change");
             tx.commit();
         } catch (HibernateException asd) {
             if (tx != null) {
-                LOG.info("rollback");
                 tx.rollback();
             }
             LOG.debug(asd.getMessage());
