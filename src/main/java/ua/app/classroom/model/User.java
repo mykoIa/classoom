@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user_account")
@@ -54,5 +55,18 @@ public class User implements Serializable {
 
     public void setUserAlreadySignedUp(boolean userAlreadySignedUp) {
         this.userAlreadySignedUp = userAlreadySignedUp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return password.equals(user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(password);
     }
 }
