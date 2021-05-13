@@ -20,7 +20,7 @@
 ## Steps to run this project:
 1. Clone this Git repository
 2. Navigate to the folder `classroom`
-3. Run Apache Tomcat v.9+
+3. Change  properties in `hibernate.cfg.xml` for connection to PostgreSQL
 4. Change `properties` in `pom.xml` for TomCat and write command to the terminal `mvn package tomcat:deploy`
    
    OR
