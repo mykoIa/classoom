@@ -56,11 +56,10 @@ public class UserService implements Serializable {
 
     public String registrationUser() {
         user.setFullName(user.getFullName().trim());
-        if (loginAndPasswordIsEmpty(user)) {
+        if (loginOrPasswordIsEmpty(user)) {
             return "";
         }
         if (userDB.findUser(user, password)) {
-            LOG.info("Login is already taken");
             setErrorMessage("This login is already taken");
             return "";
         }
@@ -81,11 +80,10 @@ public class UserService implements Serializable {
     }
 
     public String authorizeUser() {
-        if (loginAndPasswordIsEmpty(user)) {
+        if (loginOrPasswordIsEmpty(user)) {
             return "";
         }
         if (!userDB.findUser(user, password)) {
-            LOG.info("Login or password is incorrect");
             setErrorMessage("Login or password is incorrect");
             return "";
         }
@@ -119,14 +117,12 @@ public class UserService implements Serializable {
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", errorMessage));
     }
 
-    private boolean loginAndPasswordIsEmpty(User user) {
+    private boolean loginOrPasswordIsEmpty(User user) {
         if (user.getFullName().isEmpty()) {
-            LOG.info("Name is empty");
             setErrorMessage("Login can't be empty");
             return true;
         }
         if (password.isEmpty()) {
-            LOG.info("Password is empty");
             setErrorMessage("Password can't be empty");
             return true;
         }

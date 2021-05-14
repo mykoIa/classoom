@@ -13,6 +13,7 @@ import org.hibernate.service.ServiceRegistry;
 import ua.app.classroom.model.User;
 import ua.app.classroom.util.Encoding;
 
+import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;
 

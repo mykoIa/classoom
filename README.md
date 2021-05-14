@@ -13,7 +13,7 @@
 * register and save to the database
 * login to the class
 * logout from the class
-* raise their hands up
+* raise your hands up or down
 #### The WebSockets technology can send notification when:
 * new student signs in to the class
 * the student signs out of the class
