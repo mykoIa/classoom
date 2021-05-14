@@ -15,9 +15,11 @@ import ua.app.classroom.util.Encoding;
 
 import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
+import javax.servlet.annotation.WebListener;
 import java.util.Collection;
 
 @ApplicationScoped
+@WebListener
 public class UserDB {
 
     private static final Logger LOG = Logger.getLogger(UserDB.class);
@@ -39,7 +41,6 @@ public class UserDB {
 
     static {
         try {
-            LOG.info("-----------------------SSSSSSSSSSSSSSSSSSSSSSSS-------------------------------------------");
             factory = configureSessionFactory();
         } catch (Exception e) {
             LOG.error("Exception at initialization SessionFactory:", e);
