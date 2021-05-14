@@ -39,6 +39,7 @@ public class UserDB {
 
     static {
         try {
+            LOG.info("-----------------------SSSSSSSSSSSSSSSSSSSSSSSS-------------------------------------------");
             factory = configureSessionFactory();
         } catch (Exception e) {
             LOG.error("Exception at initialization SessionFactory:", e);
@@ -54,6 +55,19 @@ public class UserDB {
             session.getTransaction().commit();
             LOG.trace("Added user successfully");
             user.setPassword("");
+        } finally {
+            session.close();
+        }
+    }
+
+    public boolean findUserByName(User user) {
+        Session session = factory.openSession();
+        try {
+            Criteria criteria = session.createCriteria(User.class);
+            criteria.add(Restrictions.eq("fullName", user.getFullName()));
+            User userDB = (User) criteria.uniqueResult();
+            LOG.trace("Method findUserByName completed successfully");
+            return userDB != null;
         } finally {
             session.close();
         }

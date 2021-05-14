@@ -59,7 +59,8 @@ public class UserService implements Serializable {
         if (loginOrPasswordIsEmpty(user)) {
             return "";
         }
-        if (userDB.findUser(user, password)) {
+        if (userDB.findUserByName(user)) {
+            LOG.trace("Login is already taken");
             setErrorMessage("This login is already taken");
             return "";
         }
@@ -73,7 +74,7 @@ public class UserService implements Serializable {
 
     public String logOut() {
         user.setUserAlreadySignedUp(false);
-        userDB.updateUser(user, false);
+        userDB.updateUser(user, user.isUserAlreadySignedUp());
         webSocket.userDisconnected(user.getFullName());
         LOG.trace("Method logOut completed successfully");
         return LOGIN_FACES_REDIRECT_TRUE;
@@ -84,6 +85,7 @@ public class UserService implements Serializable {
             return "";
         }
         if (!userDB.findUser(user, password)) {
+            LOG.trace("Login or password is incorrect");
             setErrorMessage("Login or password is incorrect");
             return "";
         }
@@ -119,10 +121,12 @@ public class UserService implements Serializable {
 
     private boolean loginOrPasswordIsEmpty(User user) {
         if (user.getFullName().isEmpty()) {
+            LOG.trace("Name is empty");
             setErrorMessage("Login can't be empty");
             return true;
         }
         if (password.isEmpty()) {
+            LOG.trace("Password is empty");
             setErrorMessage("Password can't be empty");
             return true;
         }
