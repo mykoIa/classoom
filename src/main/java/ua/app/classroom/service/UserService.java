@@ -1,5 +1,6 @@
 package ua.app.classroom.service;
 
+import org.apache.log4j.Logger;
 import ua.app.classroom.db.UserDB;
 import ua.app.classroom.model.User;
 import ua.app.classroom.websocket.WebSocket;
@@ -18,6 +19,7 @@ public class UserService implements Serializable {
 
     public static final String MEMBERS_FACES_REDIRECT_TRUE = "members?faces-redirect=true";
     public static final String LOGIN_FACES_REDIRECT_TRUE = "login?faces-redirect=true";
+    private static final Logger LOG = Logger.getLogger(UserDB.class);
 
     @Inject
     private UserDB userDB;
@@ -57,6 +59,7 @@ public class UserService implements Serializable {
             return "";
         }
         if (userDB.findUser(user, password)) {
+            LOG.info("Login is already taken");
             setErrorMessage("This login is already taken");
             return "";
         }
@@ -64,6 +67,7 @@ public class UserService implements Serializable {
         userDB.addUser(user, password);
         password = "";
         webSocket.userConnected(user.getFullName());
+        LOG.trace("Method registrationUser completed successfully");
         return MEMBERS_FACES_REDIRECT_TRUE;
     }
 
@@ -71,6 +75,7 @@ public class UserService implements Serializable {
         user.setUserAlreadySignedUp(false);
         userDB.updateUser(user, false);
         webSocket.userDisconnected(user.getFullName());
+        LOG.trace("Method logOut completed successfully");
         return LOGIN_FACES_REDIRECT_TRUE;
     }
 
@@ -79,6 +84,7 @@ public class UserService implements Serializable {
             return "";
         }
         if (!userDB.findUser(user, password)) {
+            LOG.info("Login or password is incorrect");
             setErrorMessage("Login or password is incorrect");
             return "";
         }
@@ -86,6 +92,7 @@ public class UserService implements Serializable {
         user.setUserAlreadySignedUp(true);
         userDB.updateUser(user, true);
         webSocket.userConnected(user.getFullName());
+        LOG.trace("Method authorizeUser completed successfully");
         return MEMBERS_FACES_REDIRECT_TRUE;
     }
 
@@ -113,10 +120,12 @@ public class UserService implements Serializable {
 
     private boolean loginAndPasswordIsEmpty(User user) {
         if (user.getFullName().isEmpty()) {
+            LOG.info("Name is empty");
             setErrorMessage("Login can't be empty");
             return true;
         }
         if (password.isEmpty()) {
+            LOG.info("Password is empty");
             setErrorMessage("Password can't be empty");
             return true;
         }
