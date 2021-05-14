@@ -55,6 +55,7 @@ public class UserService implements Serializable {
     }
 
     public String registrationUser() {
+        user.setFullName(user.getFullName().trim());
         if (loginAndPasswordIsEmpty(user)) {
             return "";
         }
