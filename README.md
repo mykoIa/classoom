@@ -6,9 +6,11 @@
 * JSF 2.3
 * WebSockets
 * TomCat 9.0.41
+* PostgreSQL 10.16
 
 ## Description
 #### In the Application you can:
+* register and save to the database
 * login to the class
 * logout from the class
 * raise their hands up
@@ -27,3 +29,4 @@
    
    Write command `mvn package` go to http://localhost:8080/ choose `Manager App` and deploy classroom.war
 5. Visit http://localhost:8080/classroom/ in your browser and try it
+6. You can see the log in `${catalina.base}/logs/classroom`
