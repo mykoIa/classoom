@@ -1,5 +1,6 @@
 package ua.app.classroom.db;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -9,7 +10,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
-import org.jboss.logging.Logger;
 import ua.app.classroom.model.User;
 import ua.app.classroom.util.Encoding;
 
@@ -31,7 +31,7 @@ public class UserDB {
             factory = configuration.configure().buildSessionFactory(serviceRegistry);
             return factory;
         } catch (HibernateException e) {
-            LOG.info("Don't create session: ", e);
+            LOG.error("SessionFactory was not created: ", e);
         }
         return factory;
     }
@@ -40,7 +40,7 @@ public class UserDB {
         try {
             factory = configureSessionFactory();
         } catch (Exception e) {
-            LOG.info("Exception in static block:", e);
+            LOG.error("Exception at initialization SessionFactory:", e);
         }
     }
 
@@ -51,6 +51,7 @@ public class UserDB {
             user.setPassword(Encoding.encodingPassword(password));
             session.save(user);
             session.getTransaction().commit();
+            LOG.trace("Added user successfully");
             user.setPassword("");
         } finally {
             session.close();
@@ -64,6 +65,7 @@ public class UserDB {
             criteria.add(Restrictions.eq("fullName", user.getFullName()));
             criteria.add(Restrictions.eq("password", Encoding.encodingPassword(password)));
             User userDB = (User) criteria.uniqueResult();
+            LOG.trace("Method findUser completed successfully");
             return userDB != null;
         } finally {
             session.close();
@@ -75,6 +77,7 @@ public class UserDB {
         try {
             Criteria criteria = session.createCriteria(User.class);
             criteria.add(Restrictions.eq("userAlreadySignedUp", true));
+            LOG.trace("Method getUserList completed successfully");
             return criteria.list();
         } finally {
             session.close();
@@ -92,11 +95,12 @@ public class UserDB {
             e.setUserAlreadySignedUp(onlineStatus);
             session.saveOrUpdate(e);
             tx.commit();
-        } catch (HibernateException asd) {
+            LOG.trace("Method updateUser completed successfully");
+        } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
             }
-            LOG.debug(asd.getMessage());
+            LOG.debug("Exception in updateUser: ", e);
         } finally {
             session.close();
         }
