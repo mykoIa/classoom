@@ -39,7 +39,6 @@ public class UserDB {
 
     static {
         try {
-            LOG.info("-----------------------SSSSSSSSSSSSSSSSSSSSSSSS-------------------------------------------");
             factory = configureSessionFactory();
         } catch (Exception e) {
             LOG.error("Exception at initialization SessionFactory:", e);
