@@ -2,6 +2,7 @@ package ua.app.classroom.service;
 
 import org.apache.log4j.Logger;
 import ua.app.classroom.db.UserDB;
+import ua.app.classroom.db.UserMap;
 import ua.app.classroom.model.User;
 import ua.app.classroom.websocket.WebSocket;
 
@@ -23,6 +24,8 @@ public class UserService implements Serializable {
 
     @Inject
     private UserDB userDB;
+    @Inject
+    private UserMap userMap;
 
     @Inject
     private WebSocket webSocket;
@@ -52,7 +55,7 @@ public class UserService implements Serializable {
     }
 
     public Collection<User> getUserList() {
-        return userDB.getUserList();
+        return userMap.getUserList();
     }
 
     public String registrationUser() {
@@ -67,7 +70,7 @@ public class UserService implements Serializable {
         }
         userAlreadySignedUp = true;
         userDB.addUserToDB(user, password);
-        userDB.addUserToMap(user);
+        userMap.addUserToMap(user);
         password = "";
         webSocket.userConnected(user.getFullName());
         LOG.trace("Method registrationUser completed successfully");
@@ -75,7 +78,7 @@ public class UserService implements Serializable {
     }
 
     public String logOut() {
-        userDB.removeUser(user);
+        userMap.removeUser(user);
         userAlreadySignedUp = false;
         webSocket.userDisconnected(user.getFullName());
         LOG.trace("Method logOut completed successfully");
@@ -92,7 +95,7 @@ public class UserService implements Serializable {
             return "";
         }
         password = "";
-        userDB.addUserToMap(user);
+        userMap.addUserToMap(user);
         userAlreadySignedUp = true;
         webSocket.userConnected(user.getFullName());
         LOG.trace("Method authorizeUser completed successfully");

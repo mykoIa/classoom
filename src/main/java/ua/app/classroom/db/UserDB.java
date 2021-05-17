@@ -14,16 +14,12 @@ import ua.app.classroom.util.Encoding;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.annotation.WebListener;
-import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @ApplicationScoped
 @WebListener
 public class UserDB {
 
     private static final Logger LOG = Logger.getLogger(UserDB.class);
-    private final Map<String, User> userMap = new ConcurrentHashMap<>();
     private static SessionFactory factory;
 
 
@@ -88,17 +84,5 @@ public class UserDB {
         } finally {
             session.close();
         }
-    }
-
-    public void addUserToMap(User user) {
-        userMap.put(user.getFullName(), user);
-    }
-
-    public void removeUser(User user) {
-        userMap.remove(user.getFullName());
-    }
-
-    public Collection<User> getUserList() {
-        return userMap.values();
     }
 }
