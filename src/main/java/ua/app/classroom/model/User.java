@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -20,10 +21,8 @@ public class User implements Serializable {
     private String fullName;
     @Column(name = "password")
     private String password;
-    @Column(name = "d", nullable = false)
+    @Transient
     private boolean handUp;
-    @Column(name = "online", nullable = false)
-    private boolean userAlreadySignedUp;
 
     public String getFullName() {
         return fullName;
@@ -47,14 +46,6 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public boolean isUserAlreadySignedUp() {
-        return userAlreadySignedUp;
-    }
-
-    public void setUserAlreadySignedUp(boolean userAlreadySignedUp) {
-        this.userAlreadySignedUp = userAlreadySignedUp;
     }
 
     @Override

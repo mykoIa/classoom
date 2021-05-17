@@ -29,6 +29,7 @@ public class UserService implements Serializable {
 
     private User user = new User();
     private String password;
+    private boolean userAlreadySignedUp;
 
     public User getUser() {
         return user;
@@ -64,8 +65,9 @@ public class UserService implements Serializable {
             setErrorMessage("This login is already taken");
             return "";
         }
-        user.setUserAlreadySignedUp(true);
-        userDB.addUser(user, password);
+        userAlreadySignedUp = true;
+        userDB.addUserToDB(user, password);
+        userDB.addUserToMap(user);
         password = "";
         webSocket.userConnected(user.getFullName());
         LOG.trace("Method registrationUser completed successfully");
@@ -73,8 +75,8 @@ public class UserService implements Serializable {
     }
 
     public String logOut() {
-        user.setUserAlreadySignedUp(false);
-        userDB.updateUser(user, user.isUserAlreadySignedUp());
+        userDB.removeUser(user);
+        userAlreadySignedUp = false;
         webSocket.userDisconnected(user.getFullName());
         LOG.trace("Method logOut completed successfully");
         return LOGIN_FACES_REDIRECT_TRUE;
@@ -90,19 +92,19 @@ public class UserService implements Serializable {
             return "";
         }
         password = "";
-        user.setUserAlreadySignedUp(true);
-        userDB.updateUser(user, true);
+        userDB.addUserToMap(user);
+        userAlreadySignedUp = true;
         webSocket.userConnected(user.getFullName());
         LOG.trace("Method authorizeUser completed successfully");
         return MEMBERS_FACES_REDIRECT_TRUE;
     }
 
     public String redirectToLogin() {
-        return user.isUserAlreadySignedUp() ? "" : LOGIN_FACES_REDIRECT_TRUE;
+        return userAlreadySignedUp ? "" : LOGIN_FACES_REDIRECT_TRUE;
     }
 
     public String redirectToMembers() {
-        return user.isUserAlreadySignedUp() ? MEMBERS_FACES_REDIRECT_TRUE : "";
+        return userAlreadySignedUp ? MEMBERS_FACES_REDIRECT_TRUE : "";
     }
 
     public void handUpDown() {

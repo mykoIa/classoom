@@ -5,7 +5,6 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
@@ -13,17 +12,20 @@ import org.hibernate.service.ServiceRegistry;
 import ua.app.classroom.model.User;
 import ua.app.classroom.util.Encoding;
 
-import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.annotation.WebListener;
 import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @ApplicationScoped
 @WebListener
 public class UserDB {
 
     private static final Logger LOG = Logger.getLogger(UserDB.class);
+    private final Map<String, User> userMap = new ConcurrentHashMap<>();
     private static SessionFactory factory;
+
 
     private static SessionFactory configureSessionFactory() {
         try {
@@ -47,7 +49,7 @@ public class UserDB {
         }
     }
 
-    public void addUser(User user, String password) {
+    public void addUserToDB(User user, String password) {
         Session session = factory.openSession();
         try {
             session.beginTransaction();
@@ -88,37 +90,15 @@ public class UserDB {
         }
     }
 
-    public Collection<User> getUserList() {
-        Session session = factory.openSession();
-        try {
-            Criteria criteria = session.createCriteria(User.class);
-            criteria.add(Restrictions.eq("userAlreadySignedUp", true));
-            LOG.trace("Method getUserList completed successfully");
-            return criteria.list();
-        } finally {
-            session.close();
-        }
+    public void addUserToMap(User user) {
+        userMap.put(user.getFullName(), user);
     }
 
-    public void updateUser(User user, boolean onlineStatus) {
-        Session session = factory.openSession();
-        Transaction tx = null;
-        try {
-            tx = session.beginTransaction();
-            Criteria criteria = session.createCriteria(User.class);
-            criteria.add(Restrictions.eq("fullName", user.getFullName()));
-            User e = (User) criteria.uniqueResult();
-            e.setUserAlreadySignedUp(onlineStatus);
-            session.saveOrUpdate(e);
-            tx.commit();
-            LOG.trace("Method updateUser completed successfully");
-        } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            LOG.debug("Exception in updateUser: ", e);
-        } finally {
-            session.close();
-        }
+    public void removeUser(User user) {
+        userMap.remove(user.getFullName());
+    }
+
+    public Collection<User> getUserList() {
+        return userMap.values();
     }
 }
