@@ -10,18 +10,18 @@
     <h:outputStylesheet library="css" name="login.css"/>
 </h:head>
 <h:body>
-    <h:form styleClass="ui-g">
+    <h:form styleClass="ui-g" prependId="false">
         <p:growl id="msg" for="loginMsg" showDetail="true"/>
         <p:outputLabel value="Your name:"
                        styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
-        <p:inputText value="#{userService.user.fullName}"
+        <p:inputText id="j_username" placeholder="User name"
                      styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
         <p:outputLabel value="Password:"
                        styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
-        <p:password id="toggle" value="#{userService.password}" toggleMask="true" redisplay="true"
+        <p:password id="j_password" placeholder="Password"
                     styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
         <div class="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
-            <p:commandButton value="Login" update="msg" action="#{userService.authorizeUser()}"/>
+            <p:commandButton value="Login" action="#{userService.login()}"/>
             <p:commandButton value="Registration" action="registration?faces-redirect=true"/>
         </div>
     </h:form>

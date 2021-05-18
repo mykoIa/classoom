@@ -72,6 +72,19 @@ public class UserDB {
         }
     }
 
+    public User findUserByName(String username) {
+        Session session = factory.openSession();
+        try {
+            Criteria criteria = session.createCriteria(User.class);
+            criteria.add(Restrictions.eq("fullName", username));
+            User userDB = (User) criteria.uniqueResult();
+            LOG.trace("Method findUserByName completed successfully");
+            return userDB;
+        } finally {
+            session.close();
+        }
+    }
+
     public boolean findUser(User user, String password) {
         Session session = factory.openSession();
         try {
