@@ -1,5 +1,8 @@
 package ua.app.classroom.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,11 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user_account")
-public class User implements Serializable {
+public class User implements Serializable, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +25,8 @@ public class User implements Serializable {
     private String fullName;
     @Column(name = "password")
     private String password;
+    @Column(name = "role")
+    private String role = "ROLE_USER";
     @Transient
     private boolean handUp;
 
@@ -48,6 +54,44 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return fullName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,4 +104,6 @@ public class User implements Serializable {
     public int hashCode() {
         return Objects.hash(password);
     }
+
+
 }

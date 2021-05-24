@@ -8,15 +8,9 @@ import ua.app.classroom.websocket.WebSocket;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -64,16 +58,6 @@ public class UserService implements Serializable {
         return userMap.getUserList();
     }
 
-    public String login() throws ServletException, IOException {
-        //do any job with the associated values that you've got from the user, like persisting attempted login, etc.
-        LOG.info("Start login method-------------------");
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ExternalContext extenalContext = facesContext.getExternalContext();
-        RequestDispatcher dispatcher = ((ServletRequest)extenalContext.getRequest()).getRequestDispatcher("/j_spring_security_check");
-        dispatcher.forward((ServletRequest)extenalContext.getRequest(), (ServletResponse)extenalContext.getResponse());
-        facesContext.responseComplete();
-        return null;
-    }
 
     public String registrationUser() {
         user.setFullName(user.getFullName().trim());

@@ -23,6 +23,6 @@ public class Encoding {
         } catch (NoSuchAlgorithmException e) {
             LOG.error("There was an error encrypting the password: ", e);
         }
-        return encryptedPassword;
+        return "{MD5}" + encryptedPassword;
     }
 }

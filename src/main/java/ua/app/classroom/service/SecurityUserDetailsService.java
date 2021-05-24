@@ -9,27 +9,26 @@ import org.springframework.stereotype.Service;
 import ua.app.classroom.db.UserDB;
 import ua.app.classroom.model.User;
 
-@Service
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.security.enterprise.authentication.mechanism.http.AutoApplySession;
+
+@AutoApplySession
 public class SecurityUserDetailsService implements UserDetailsService {
 
     private static final Logger LOG = Logger.getLogger(SecurityUserDetailsService.class);
 
-    @Autowired
-    private UserDB userDB;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         LOG.info("Start loadUserByUsername method");
+        UserDB userDB = new UserDB();
         User user = userDB.findUserByName(username);
         if (user == null) {
             LOG.info("User not found");
             throw new UsernameNotFoundException("User not found.");
         }
-        return (UserDetails) user;
-    }
-
-    public void createUser(UserDetails user) {
-        LOG.info("Start createUser method");
-        userDB.addUserToDB((User) user, user.getPassword());
+        return user;
     }
 }

@@ -2,28 +2,29 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-<f:metadata>
-    <f:viewAction action="#{userService.redirectToMembers}"/>
-</f:metadata>
 <h:head>
     <title>login</title>
     <h:outputStylesheet library="css" name="login.css"/>
 </h:head>
 <h:body>
-    <h:form styleClass="ui-g" prependId="false">
+    <form action="#{request.contextPath}/j_spring_security_check" method="post" class="ui-g">
         <p:growl id="msg" for="loginMsg" showDetail="true"/>
         <p:outputLabel value="Your name:"
                        styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
-        <p:inputText id="j_username" placeholder="User name"
+        <p:inputText id="username" placeholder="User name" name="username" required="required"
                      styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
         <p:outputLabel value="Password:"
                        styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
-        <p:password id="j_password" placeholder="Password"
+        <p:password id="password" placeholder="Password" name="password" required="required"
                     styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+
         <div class="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
-            <p:commandButton value="Login" action="#{userService.login()}"/>
-            <p:commandButton value="Registration" action="registration?faces-redirect=true"/>
+            <button type="submit"
+                    class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only Wid60">
+                <span class="ui-button-text">Login</span>
+            </button>
+            <p:commandButton value="Registration" action="registration?faces-redirect=true" />
         </div>
-    </h:form>
+    </form>
 </h:body>
 </html>

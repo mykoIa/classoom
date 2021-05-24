@@ -1,9 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-<f:metadata>
-    <f:viewAction action="#{userService.redirectToLogin}"/>
-</f:metadata>
 <h:head>
     <title>members</title>
     <h:outputStylesheet library="css" name="members.css"/>
@@ -16,8 +13,8 @@
                 <p:menuitem value="#{userService.user.handUp ? 'Raise hand down' : 'Raise hand up'}"
                             actionListener="#{userService.handUpDown}" update="navbar"/>
             </p:submenu>
-            <p:submenu label="#{userService.user.fullName}" class="float-right" icon="pi pi-fw pi-user">
-                <p:menuitem value="Logout" action="#{userService.logOut()}" icon="pi pi-fw pi-sign-out"/>
+            <p:submenu action="#{pageContext.request.contextPath}/j_spring_security_logout" method="post" label="#{userService.user.fullName}" class="float-right" icon="pi pi-fw pi-user">
+                <p:menuitem value="Logout" icon="pi pi-fw pi-sign-out"/>
             </p:submenu>
         </p:menubar>
     </h:form>
@@ -36,5 +33,7 @@
     <f:websocket channel="classroom" onmessage="onmessage">
         <f:ajax event="updateTable" render="usersTable"/>
     </f:websocket>
+
+    <h:outputLink value="${pageContext.request.contextPath}/j_spring_security_logout">logout</h:outputLink>
 </h:body>
 </html>
