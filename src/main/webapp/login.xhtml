@@ -23,8 +23,18 @@
                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only Wid60">
                 <span class="ui-button-text">Login</span>
             </button>
-            <p:commandButton value="Registration" action="registration?faces-redirect=true" />
         </div>
     </form>
+    <h:form styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
+        <p:commandButton value="Registration" action="registration?faces-redirect=true"/>
+    </h:form>
+
+    <h:form prependId="false">
+        <h:outputLabel value="User Id: "  />
+        <h:inputText id="j_username" label="User Id" required="true" value="#{userService.user.fullName}" />
+        <h:outputLabel value="Password: "  for ="password" />
+        <h:inputSecret id="j_password" value="#{userService.password}" />
+        <h:commandButton value="Submit" action="#{userService.login}" />
+    </h:form>
 </h:body>
 </html>

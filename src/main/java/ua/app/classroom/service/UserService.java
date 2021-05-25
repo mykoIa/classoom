@@ -8,9 +8,15 @@ import ua.app.classroom.websocket.WebSocket;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -78,12 +84,19 @@ public class UserService implements Serializable {
         return MEMBERS_FACES_REDIRECT_TRUE;
     }
 
-    public String logOut() {
-        userMap.removeUser(user);
-        userAlreadySignedUp = false;
-        webSocket.userDisconnected(user.getFullName());
+    public String logOut() throws ServletException, IOException {
+//        userMap.removeUser(user);
+//        userAlreadySignedUp = false;
+//        webSocket.userDisconnected(user.getFullName());
         LOG.trace("Method logOut completed successfully");
-        return LOGIN_FACES_REDIRECT_TRUE;
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        RequestDispatcher dispatcher = ((ServletRequest)externalContext.getRequest()).getRequestDispatcher("/j_spring_security_logout");
+        dispatcher.forward((ServletRequest)externalContext.getRequest(), (ServletResponse)externalContext.getResponse());
+        facesContext.getResponseComplete();
+//        return LOGIN_FACES_REDIRECT_TRUE;
+        return "";
     }
 
     public String authorizeUser() {
@@ -101,6 +114,16 @@ public class UserService implements Serializable {
         webSocket.userConnected(user.getFullName());
         LOG.trace("Method authorizeUser completed successfully");
         return MEMBERS_FACES_REDIRECT_TRUE;
+    }
+
+    public String login() throws ServletException, IOException {
+        //do any job with the associated values that you've got from the user, like persisting attempted login, etc.
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext extenalContext = facesContext.getExternalContext();
+        RequestDispatcher dispatcher = ((ServletRequest)extenalContext.getRequest()).getRequestDispatcher("/j_spring_security_logout");
+        dispatcher.forward((ServletRequest)extenalContext.getRequest(), (ServletResponse)extenalContext.getResponse());
+        facesContext.getResponseComplete();
+        return null;
     }
 
     public String redirectToLogin() {

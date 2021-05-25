@@ -13,8 +13,8 @@
                 <p:menuitem value="#{userService.user.handUp ? 'Raise hand down' : 'Raise hand up'}"
                             actionListener="#{userService.handUpDown}" update="navbar"/>
             </p:submenu>
-            <p:submenu action="#{pageContext.request.contextPath}/j_spring_security_logout" method="post" label="#{userService.user.fullName}" class="float-right" icon="pi pi-fw pi-user">
-                <p:menuitem value="Logout" icon="pi pi-fw pi-sign-out"/>
+            <p:submenu label="#{userService.user.fullName}" class="float-right" icon="pi pi-fw pi-user">
+                <p:menuitem value="Logout" action="#{userService.logOut()}" icon="pi pi-fw pi-sign-out"/>
             </p:submenu>
         </p:menubar>
     </h:form>
@@ -33,7 +33,5 @@
     <f:websocket channel="classroom" onmessage="onmessage">
         <f:ajax event="updateTable" render="usersTable"/>
     </f:websocket>
-
-    <h:outputLink value="${pageContext.request.contextPath}/j_spring_security_logout">logout</h:outputLink>
 </h:body>
 </html>

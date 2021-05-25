@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:beans="http://www.springframework.org/schema/beans"
        xmlns:security="http://www.springframework.org/schema/security"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -16,12 +17,25 @@
                              username-parameter="username"
                              password-parameter="password" default-target-url="/members.xhtml"
                              always-use-default-target="true"/>
-        <security:logout logout-success-url="/" logout-url="/j_spring_security_logout" invalidate-session="true"/>
+        <security:logout logout-success-url="/login.xhtml" logout-url="/j_spring_security_logout" invalidate-session="true"/>
     </security:http>
 
+<!--    <access-denied-handler error-page="/403(для ролей)"401(для аноніма) />-->
+
+    <beans:bean id="customAuthenticationProvider"
+                class="ua.app.classroom.security.MyDaoAuthenticationProvider">
+        <beans:property name="userDetailsService" ref="SecurityUserDetailsService" />
+    </beans:bean>
+
+<!--    <security:authentication-manager>-->
+<!--        <security:authentication-provider user-service-ref="SecurityUserDetailsService"/>-->
+<!--    </security:authentication-manager>-->
+
     <security:authentication-manager>
-        <security:authentication-provider user-service-ref="SecurityUserDetailsService"/>
+        <security:authentication-provider ref="customAuthenticationProvider"/>
     </security:authentication-manager>
 
+
     <bean id="SecurityUserDetailsService" class="ua.app.classroom.service.SecurityUserDetailsService"/>
+<!--    <bean id="customAuthenticationProvider" class="ua.app.classroom.security.MyDaoAuthenticationProvider"/>-->
 </beans>

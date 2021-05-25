@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ua.app.classroom.db.UserDB;
 import ua.app.classroom.model.User;
+import ua.app.classroom.security.MyDaoAuthenticationProvider;
+import ua.app.classroom.websocket.WebSocket;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -19,6 +21,8 @@ public class SecurityUserDetailsService implements UserDetailsService {
 
     private static final Logger LOG = Logger.getLogger(SecurityUserDetailsService.class);
 
+    @Inject
+    private WebSocket webSocket;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -29,6 +33,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
             LOG.info("User not found");
             throw new UsernameNotFoundException("User not found.");
         }
+        LOG.info("name:" + user.getFullName() + "\npassword: " + user.getPassword());
         return user;
     }
 }
