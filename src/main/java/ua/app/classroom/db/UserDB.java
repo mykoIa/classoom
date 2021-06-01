@@ -93,4 +93,15 @@ public class UserDB {
             session.close();
         }
     }
+
+    public void deleteUser(User user) {
+        Session session = factory.openSession();
+        try {
+            session.beginTransaction();
+            session.delete(user);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+    }
 }

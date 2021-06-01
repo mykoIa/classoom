@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Create user</title>
+    <h:outputStylesheet library="css" name="add-user.css"/>
+</h:head>
+<h:body>
+    <h:form id="navbar">
+        <p:menubar>
+            <p:submenu label="#{userService.user.fullName}" icon="pi pi-fw pi-user" style="float: right;">
+                <p:menuitem value="Members" icon="pi pi-fw pi-users" action="/secure/members.xhtml?faces-redirect=true"/>
+                <p:menuitem value="Admin menu" icon="pi pi-fw pi-lock" action="user-list.xhtml?faces-redirect=true" access="hasAnyAuthority('ADMIN')" />
+                <p:menuitem value="Logout" icon="pi pi-fw pi-sign-out" selectionMode="multiple" class="hider"
+                            onclick="triggerButton1Click()"/>
+            </p:submenu>
+        </p:menubar>
+    </h:form>
+
+    <h:form styleClass="ui-g">
+        <p:growl id="msg" for="loginMsg" showDetail="true"/>
+        <p:outputLabel value="User name:"
+                       styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+        <p:inputText value="#{registrationService.user.fullName}"
+                     styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+        <p:outputLabel value="Password:"
+                       styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+        <p:password id="toggle" value="#{registrationService.password}" toggleMask="true" redisplay="true"
+                    styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+        <p:outputLabel value="Role:"
+                       styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+        <p:inputText value="#{registrationService.user.role}" toggleMask="true" redisplay="true"
+                     styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
+        <div class="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
+            <p:commandButton value="Save" update="msg" action="#{registrationService.singIn()}"/>
+        </div>
+    </h:form>
+</h:body>
+</html>

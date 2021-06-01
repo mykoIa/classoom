@@ -21,6 +21,9 @@ public class AdminService implements Serializable {
 
     private List<User> userList = new ArrayList<>();
 
+    public void deleteUser() {
+//        userDB.deleteUser(user);
+    }
 
     public List<User> getUserList() {
         return userList;

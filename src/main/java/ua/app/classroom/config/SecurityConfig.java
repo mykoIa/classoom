@@ -43,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().
                 antMatchers("/secure/**").authenticated().
                 antMatchers("/login.xhtml", "/registration.xhtml").anonymous().
+//                antMatchers("/secure/admin/**").hasRole("ADMIN").
                 and().formLogin().
                 loginPage("/login.xhtml").
                 loginProcessingUrl("/appLogin").
