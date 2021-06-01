@@ -1,4 +1,4 @@
-package ua.app.classroom;
+package ua.app.classroom.config;
 
 import javax.faces.annotation.FacesConfig;
 import javax.faces.annotation.FacesConfig.Version;

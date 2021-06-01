@@ -1,6 +1,7 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
     <title>members</title>
     <h:outputStylesheet library="css" name="members.css"/>
@@ -14,10 +15,12 @@
                             actionListener="#{userService.handUpDown}" update="navbar"/>
             </p:submenu>
             <p:submenu label="#{userService.user.fullName}" class="float-right" icon="pi pi-fw pi-user">
-                <p:menuitem value="Logout" action="#{userService.logOut()}" icon="pi pi-fw pi-sign-out"/>
+                <p:menuitem value="Logout" icon="pi pi-fw pi-sign-out" selectionMode="multiple" class="hider"
+                            onclick="triggerButton1Click()"/>
             </p:submenu>
         </p:menubar>
     </h:form>
+
     <div class="ui-g">
         <p:dataTable id="usersTable" var="user" value="#{userService.userList}"
                      styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
@@ -29,9 +32,15 @@
             </p:column>
         </p:dataTable>
     </div>
+
     <h:outputScript library="js" name="script.js"/>
     <f:websocket channel="classroom" onmessage="onmessage">
         <f:ajax event="updateTable" render="usersTable"/>
     </f:websocket>
+
+    <form action="${request.contextPath}/appLogout" method="POST">
+        <input id="buttonLogout" type="submit" style="display: none;"/>
+    </form>
+
 </h:body>
 </html>

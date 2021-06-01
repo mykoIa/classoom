@@ -9,12 +9,11 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
-import ua.app.classroom.model.User;
+import org.springframework.stereotype.Service;
+import ua.app.classroom.entity.User;
 import ua.app.classroom.util.Encoding;
 
-import javax.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
+@Service
 public class UserDB {
 
     private static final Logger LOG = Logger.getLogger(UserDB.class);
@@ -56,7 +55,7 @@ public class UserDB {
         }
     }
 
-    public boolean findUserByName(User user) {
+    public boolean userIsExist(User user) {
         Session session = factory.openSession();
         try {
             Criteria criteria = session.createCriteria(User.class);
@@ -69,7 +68,7 @@ public class UserDB {
         }
     }
 
-    public User findUserByName(String username) {
+    public User userIsExist(String username) {
         Session session = factory.openSession();
         try {
             Criteria criteria = session.createCriteria(User.class);
@@ -77,20 +76,6 @@ public class UserDB {
             User userDB = (User) criteria.uniqueResult();
             LOG.trace("Method findUserByName completed successfully");
             return userDB;
-        } finally {
-            session.close();
-        }
-    }
-
-    public boolean findUser(User user, String password) {
-        Session session = factory.openSession();
-        try {
-            Criteria criteria = session.createCriteria(User.class);
-            criteria.add(Restrictions.eq("fullName", user.getFullName()));
-            criteria.add(Restrictions.eq("password", Encoding.encodingPassword(password)));
-            User userDB = (User) criteria.uniqueResult();
-            LOG.trace("Method findUser completed successfully");
-            return userDB != null;
         } finally {
             session.close();
         }

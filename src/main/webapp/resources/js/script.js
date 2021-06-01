@@ -7,3 +7,8 @@ function onmessage(message, _, __) {
     })
   }
 }
+
+function triggerButton1Click() {
+  document.getElementById("buttonLogout").click();
+}
+

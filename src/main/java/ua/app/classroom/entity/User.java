@@ -1,4 +1,4 @@
-package ua.app.classroom.model;
+package ua.app.classroom.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +12,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Table(name = "user_account")
@@ -91,19 +90,5 @@ public class User implements Serializable, UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return password.equals(user.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(password);
-    }
-
 
 }
