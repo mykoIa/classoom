@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import ua.app.classroom.entity.User;
 import ua.app.classroom.util.Encoding;
 
+import java.util.List;
+
 @Service
 public class UserDB {
 
@@ -76,6 +78,17 @@ public class UserDB {
             User userDB = (User) criteria.uniqueResult();
             LOG.trace("Method findUserByName completed successfully");
             return userDB;
+        } finally {
+            session.close();
+        }
+    }
+
+    public List<User> getUserList() {
+        Session session = factory.openSession();
+        try {
+            Criteria criteria = session.createCriteria(User.class);
+            criteria.add(Restrictions.gt("id", 0L));
+            return criteria.list();
         } finally {
             session.close();
         }

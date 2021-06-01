@@ -2,20 +2,18 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
+<f:metadata>
+    <f:viewAction action="#{adminService.setUserList()}"/>
+</f:metadata>
 <h:head>
-    <title>members</title>
-    <h:outputStylesheet library="css" name="members.css"/>
+    <title>User list</title>
+    <h:outputStylesheet library="css" name="user-list.css"/>
 </h:head>
 <h:body>
-    <p:growl widgetVar="globalMessage"/>
     <h:form id="navbar">
         <p:menubar>
-            <p:submenu label="Action">
-                <p:menuitem value="#{userService.user.handUp ? 'Raise hand down' : 'Raise hand up'}"
-                            actionListener="#{userService.handUpDown}" update="navbar"/>
-            </p:submenu>
             <p:submenu label="#{userService.user.fullName}" class="float-right" icon="pi pi-fw pi-user">
-                <p:menuitem value="Admin menu" icon="pi pi-fw pi-lock" action="admin/user-list.xhtml?faces-redirect=true" access="hasAnyAuthority('ADMIN')" />
+                <p:menuitem value="Members" icon="pi pi-fw pi-users" action="/secure/members.xhtml?faces-redirect=true"/>
                 <p:menuitem value="Logout" icon="pi pi-fw pi-sign-out" selectionMode="multiple" class="hider"
                             onclick="triggerButton1Click()"/>
             </p:submenu>
@@ -23,24 +21,26 @@
     </h:form>
 
     <div class="ui-g">
-        <p:dataTable id="usersTable" var="user" value="#{userService.userList}"
+        <p:dataTable id="usersTable" var="user" value="#{adminService.userList}"
                      styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
-            <p:column headerText="Class members">
+            <p:column headerText="All Users">
                 <h:outputText value="#{user.fullName}"/>
             </p:column>
-            <p:column width="15">
-                <h:outputText rendered="#{user.handUp}" styleClass="pi pi-arrow-circle-up"/>
+            <p:column>
+                <h:outputText value="#{user.role}"/>
+            </p:column>
+            <p:column width="47">
+                <p:commandButton value="Edit"/>
+            </p:column>
+            <p:column width="67">
+                <p:commandButton value="Delete" styleClass="ui-button-danger" />
             </p:column>
         </p:dataTable>
     </div>
 
-    <h:outputScript library="js" name="script.js"/>
-    <f:websocket channel="classroom" onmessage="onmessage">
-        <f:ajax event="updateTable" render="usersTable"/>
-    </f:websocket>
-
     <form action="${request.contextPath}/appLogout" method="POST">
         <input id="buttonLogout" type="submit" style="display: none;"/>
     </form>
+    <h:outputScript library="js" name="script.js"/>
 </h:body>
 </html>
