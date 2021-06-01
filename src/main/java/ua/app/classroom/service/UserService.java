@@ -1,6 +1,7 @@
 package ua.app.classroom.service;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import ua.app.classroom.db.UserDB;
 import ua.app.classroom.db.UserMap;
 import ua.app.classroom.model.User;
@@ -30,7 +31,8 @@ public class UserService implements Serializable {
 
     @Inject
     private UserDB userDB;
-    @Inject
+
+    @Autowired
     private UserMap userMap;
 
     @Inject
@@ -64,6 +66,9 @@ public class UserService implements Serializable {
         return userMap.getUserList();
     }
 
+    public void setUserMap(UserMap userMap) {
+        this.userMap = userMap;
+    }
 
     public String registrationUser() {
         user.setFullName(user.getFullName().trim());
@@ -99,32 +104,34 @@ public class UserService implements Serializable {
         return "";
     }
 
-    public String authorizeUser() {
-        if (loginOrPasswordIsEmpty(user)) {
-            return "";
-        }
-        if (!userDB.findUser(user, password)) {
-            LOG.trace("Login or password is incorrect");
-            setErrorMessage("Login or password is incorrect");
-            return "";
-        }
-        password = "";
+    public void authorizeUser(User user) {
+//        if (loginOrPasswordIsEmpty(user)) {
+//            return "";
+//        }
+//        if (!userDB.findUser(userName, password)) {
+//            LOG.trace("Login or password is incorrect");
+//            setErrorMessage("Login or password is incorrect");
+//            return "";
+//        }
         userMap.addUserToMap(user);
         userAlreadySignedUp = true;
-        webSocket.userConnected(user.getFullName());
+//        webSocket.userConnected(user.getFullName());
         LOG.trace("Method authorizeUser completed successfully");
-        return MEMBERS_FACES_REDIRECT_TRUE;
+//        return MEMBERS_FACES_REDIRECT_TRUE;
     }
 
-    public String login() throws ServletException, IOException {
-        //do any job with the associated values that you've got from the user, like persisting attempted login, etc.
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ExternalContext extenalContext = facesContext.getExternalContext();
-        RequestDispatcher dispatcher = ((ServletRequest)extenalContext.getRequest()).getRequestDispatcher("/j_spring_security_logout");
-        dispatcher.forward((ServletRequest)extenalContext.getRequest(), (ServletResponse)extenalContext.getResponse());
-        facesContext.getResponseComplete();
-        return null;
-    }
+//    public String login() throws ServletException, IOException {
+//        userMap.addUserToMap(user);
+//        userAlreadySignedUp = true;
+//        webSocket.userConnected(user.getFullName());
+//        LOG.trace("Method authorizeUser completed successfully");
+//        FacesContext facesContext = FacesContext.getCurrentInstance();
+//        ExternalContext extenalContext = facesContext.getExternalContext();
+//        RequestDispatcher dispatcher = ((ServletRequest)extenalContext.getRequest()).getRequestDispatcher("/j_spring_security_logout");
+//        dispatcher.forward((ServletRequest)extenalContext.getRequest(), (ServletResponse)extenalContext.getResponse());
+//        facesContext.getResponseComplete();
+//        return null;
+//    }
 
     public String redirectToLogin() {
         return userAlreadySignedUp ? "" : LOGIN_FACES_REDIRECT_TRUE;

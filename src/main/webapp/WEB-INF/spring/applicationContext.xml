@@ -25,17 +25,18 @@
     <beans:bean id="customAuthenticationProvider"
                 class="ua.app.classroom.security.MyDaoAuthenticationProvider">
         <beans:property name="userDetailsService" ref="SecurityUserDetailsService" />
+<!--        <beans:property name="userService" ref="UserService" />-->
     </beans:bean>
 
-<!--    <security:authentication-manager>-->
-<!--        <security:authentication-provider user-service-ref="SecurityUserDetailsService"/>-->
-<!--    </security:authentication-manager>-->
+<!--    <beans:bean id="UserService" class="ua.app.classroom.service.UserService">-->
+<!--        <beans:property name="userMap" ref="UserMap" />-->
+<!--    </beans:bean>-->
 
     <security:authentication-manager>
         <security:authentication-provider ref="customAuthenticationProvider"/>
     </security:authentication-manager>
 
-
     <bean id="SecurityUserDetailsService" class="ua.app.classroom.service.SecurityUserDetailsService"/>
-<!--    <bean id="customAuthenticationProvider" class="ua.app.classroom.security.MyDaoAuthenticationProvider"/>-->
+<!--    <bean id="UserService" class="ua.app.classroom.service.UserService"/>-->
+<!--    <bean id="UserMap" class="ua.app.classroom.db.UserMap"/>-->
 </beans>

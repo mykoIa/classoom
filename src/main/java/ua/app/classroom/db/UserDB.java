@@ -13,15 +13,12 @@ import ua.app.classroom.model.User;
 import ua.app.classroom.util.Encoding;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.servlet.annotation.WebListener;
 
 @ApplicationScoped
-@WebListener
 public class UserDB {
 
     private static final Logger LOG = Logger.getLogger(UserDB.class);
     private static SessionFactory factory;
-
 
     private static SessionFactory configureSessionFactory() {
         try {
