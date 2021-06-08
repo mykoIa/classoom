@@ -17,7 +17,8 @@
         <p:password id="toggle" value="#{registrationService.password}" toggleMask="true" redisplay="true"
                     styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
         <div class="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
-            <p:commandButton value="Registration" update="msg" action="#{registrationService.singIn()}"/>
+            <p:commandButton value="Registration" update="msg" action="#{registrationService.registration()}"/>
+            <p:commandButton value="Login" update="msg" action="login?faces-redirect=true"/>
         </div>
     </h:form>
 </h:body>

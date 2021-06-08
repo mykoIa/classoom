@@ -12,6 +12,6 @@
         <property name="show_sql">false</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
 
-        <mapping class="ua.app.classroom.entity.User" />
+        <mapping class="ua.app.classroom.model.entity.User" />
     </session-factory>
 </hibernate-configuration>

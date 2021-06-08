@@ -3,8 +3,8 @@ package ua.app.classroom.service;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import ua.app.classroom.db.UserMap;
-import ua.app.classroom.entity.User;
-import ua.app.classroom.util.ErrorMessage;
+import ua.app.classroom.model.entity.User;
+import ua.app.classroom.util.SendMessage;
 import ua.app.classroom.websocket.WebSocket;
 
 import javax.enterprise.context.SessionScoped;
@@ -43,7 +43,7 @@ public class UserService implements Serializable {
     }
 
     public String errorLogin () {
-        ErrorMessage.sendMessageWhenAuthorizeFailed();
+        SendMessage.sendMessageWhenAuthorizeFailed();
         return "/login?faces-redirect=true";
     }
 

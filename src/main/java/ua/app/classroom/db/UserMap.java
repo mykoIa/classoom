@@ -1,6 +1,6 @@
 package ua.app.classroom.db;
 
-import ua.app.classroom.entity.User;
+import ua.app.classroom.model.entity.User;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;

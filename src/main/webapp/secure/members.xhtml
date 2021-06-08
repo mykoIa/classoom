@@ -1,27 +1,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
     <title>members</title>
     <h:outputStylesheet library="css" name="members.css"/>
 </h:head>
 <h:body>
-    <p:growl widgetVar="globalMessage"/>
-    <h:form id="navbar">
-        <p:menubar>
-            <p:submenu label="Action">
-                <p:menuitem value="#{userService.user.handUp ? 'Raise hand down' : 'Raise hand up'}"
-                            actionListener="#{userService.handUpDown}" update="navbar"/>
-            </p:submenu>
-            <p:submenu label="#{userService.user.fullName}" class="float-right" icon="pi pi-fw pi-user">
-                <p:menuitem value="Admin menu" icon="pi pi-fw pi-lock" action="admin/user-list.xhtml?faces-redirect=true" access="hasAnyAuthority('ADMIN')" />
-                <p:menuitem value="Logout" icon="pi pi-fw pi-sign-out" selectionMode="multiple" class="hider"
-                            onclick="triggerButton1Click()"/>
-            </p:submenu>
-        </p:menubar>
-    </h:form>
+    <ui:insert name = "menu" >
+        <ui:include src = "menu.xhtml" />
+    </ui:insert>
 
+    <p:growl widgetVar="globalMessage"/>
     <div class="ui-g">
         <p:dataTable id="usersTable" var="user" value="#{userService.userList}"
                      styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
@@ -38,9 +29,5 @@
     <f:websocket channel="classroom" onmessage="onmessage">
         <f:ajax event="updateTable" render="usersTable"/>
     </f:websocket>
-
-    <form action="${request.contextPath}/appLogout" method="POST">
-        <input id="buttonLogout" type="submit" style="display: none;"/>
-    </form>
 </h:body>
 </html>

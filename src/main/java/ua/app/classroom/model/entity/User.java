@@ -1,4 +1,4 @@
-package ua.app.classroom.entity;
+package ua.app.classroom.model.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +25,7 @@ public class User implements Serializable, UserDetails {
     @Column(name = "password")
     private String password;
     @Column(name = "role")
-    private String role = "ROLE_USER";
+    private String role = "USER";
     @Transient
     private boolean handUp;
 

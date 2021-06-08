@@ -16,13 +16,15 @@ import ua.app.classroom.security.CustomAuthenticationSuccessHandler;
 import ua.app.classroom.security.CustomLogoutSuccessHandler;
 import ua.app.classroom.security.SecurityUserDetailsService;
 import ua.app.classroom.service.AdminService;
+import ua.app.classroom.service.RegistrationService;
 import ua.app.classroom.service.UserService;
 import ua.app.classroom.websocket.WebSocket;
+import ua.app.classroom.websocket.WebSocketForAdmin;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = "ua.app.classroom", excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {WebSocket.class, UserService.class, AdminService.class})})
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {WebSocket.class, UserService.class, AdminService.class, WebSocketForAdmin.class})})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired

@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ua.app.classroom.db.UserDB;
-import ua.app.classroom.entity.User;
+import ua.app.classroom.model.entity.User;
 
 @Service
 public class SecurityUserDetailsService implements UserDetailsService {

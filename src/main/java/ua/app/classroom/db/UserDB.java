@@ -5,12 +5,13 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
 import org.springframework.stereotype.Service;
-import ua.app.classroom.entity.User;
+import ua.app.classroom.model.entity.User;
 import ua.app.classroom.util.Encoding;
 
 import java.util.List;
@@ -83,6 +84,19 @@ public class UserDB {
         }
     }
 
+    public boolean userIsExistTest(String username) {
+        Session session = factory.openSession();
+        try {
+            Criteria criteria = session.createCriteria(User.class);
+            criteria.add(Restrictions.eq("fullName", username));
+            User userDB = (User) criteria.uniqueResult();
+            LOG.trace("Method findUserByName completed successfully");
+            return userDB != null;
+        } finally {
+            session.close();
+        }
+    }
+
     public List<User> getUserList() {
         Session session = factory.openSession();
         try {
@@ -104,4 +118,27 @@ public class UserDB {
             session.close();
         }
     }
+
+    public void updateUser(User user, String fullName) {
+            Session session = factory.openSession();
+            Transaction tx = null;
+            try {
+                tx = session.beginTransaction();
+                Criteria criteria = session.createCriteria(User.class);
+                criteria.add(Restrictions.eq("fullName", user.getFullName()));
+                User e = (User) criteria.uniqueResult();
+                e.setFullName(fullName);
+                e.setRole(user.getRole());
+                session.saveOrUpdate(e);
+                tx.commit();
+                LOG.trace("Method updateUser completed successfully");
+            } catch (HibernateException e) {
+                if (tx != null) {
+                    tx.rollback();
+                }
+                LOG.debug("Exception in updateUser: ", e);
+            } finally {
+                session.close();
+            }
+        }
 }

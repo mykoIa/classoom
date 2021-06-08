@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+    <title>Edit user</title>
+    <h:outputStylesheet library="css" name="add-user.css"/>
+</h:head>
+<h:body>
+    <ui:composition>
+        <h:form id="navbar">
+            <p:menubar>
+                <p:submenu label="Action">
+                    <p:menuitem value="#{userService.user.handUp ? 'Raise hand down' : 'Raise hand up'}"
+                                actionListener="#{userService.handUpDown}" update="navbar"/>
+                </p:submenu>
+                <p:submenu label="#{userService.user.fullName}" icon="pi pi-fw pi-user" style="float: right;">
+                    <p:menuitem value="Members" icon="pi pi-fw pi-users"
+                                action="/secure/members.xhtml?faces-redirect=true"/>
+                    <p:menuitem value="Admin menu" icon="pi pi-fw pi-lock" action="/secure/admin/user-list.xhtml?faces-redirect=true"
+                                access="hasAnyAuthority('ADMIN')"/>
+                    <p:menuitem value="Logout" icon="pi pi-fw pi-sign-out" selectionMode="multiple" class="hider"
+                                onclick="triggerButton1Click()"/>
+                </p:submenu>
+            </p:menubar>
+        </h:form>
+        <form action="${request.contextPath}/appLogout" method="POST">
+            <input id="buttonLogout" type="submit" style="display: none;"/>
+        </form>
+    </ui:composition>
+</h:body>
+</html>
