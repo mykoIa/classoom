@@ -37,7 +37,7 @@ public class AdminService implements Serializable {
     public String edit(User user) {
         this.user = user;
         fullName = user.getFullName();
-        if (user.getRole().equals("ADMIN")) {
+        if (user.getRole().equals("ROLE_ADMIN")) {
             setRoleAdmin(true);
         }
         return "edit?faces-redirect=true";
@@ -48,9 +48,9 @@ public class AdminService implements Serializable {
             return "";
         }
         if (roleAdmin) {
-            user.setRole("ADMIN");
+            user.setRole("ROLE_ADMIN");
         } else {
-            user.setRole("USER");
+            user.setRole("ROLE_USER");
         }
         if (user.getFullName().equals(fullName) || !userDB.userIsExistTest(fullName)) {
             userDB.updateUser(user, fullName);

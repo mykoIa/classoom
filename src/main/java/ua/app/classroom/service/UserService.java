@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import ua.app.classroom.db.UserMap;
 import ua.app.classroom.model.entity.User;
+import ua.app.classroom.security.CustomDetailService;
 import ua.app.classroom.util.SendMessage;
 import ua.app.classroom.websocket.WebSocket;
 
@@ -35,11 +36,13 @@ public class UserService implements Serializable {
     }
 
     public String login() {
-        user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomDetailService customUserDetail = new CustomDetailService();
+        customUserDetail = (CustomDetailService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        user = customUserDetail.getUser();
         userMap.addUserToMap(user);
         webSocket.userConnected(user.getFullName());
         LOG.trace("Method authorizeUser completed successfully");
-        return "/secure/members?faces-redirect=true";
+        return "/secure/user/members?faces-redirect=true";
     }
 
     public String errorLogin () {

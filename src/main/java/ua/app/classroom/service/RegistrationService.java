@@ -47,7 +47,7 @@ public class RegistrationService implements Serializable {
             return true;
         }
         if (roleAdmin) {
-            user.setRole("ADMIN");
+            user.setRole("ROLE_ADMIN");
         }
         userDB.addUserToDB(user, password);
         resetFields();
@@ -58,7 +58,7 @@ public class RegistrationService implements Serializable {
     private void resetFields() {
         roleAdmin = false;
         user.setFullName("");
-        user.setRole("USER");
+        user.setRole("ROLE_USER");
         password = "";
     }
 
