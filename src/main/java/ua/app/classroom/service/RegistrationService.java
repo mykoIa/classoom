@@ -1,7 +1,6 @@
 package ua.app.classroom.service;
 
 import org.apache.log4j.Logger;
-import org.springframework.web.context.ContextLoader;
 import ua.app.classroom.db.UserDB;
 import ua.app.classroom.model.entity.User;
 import ua.app.classroom.util.SendMessage;
@@ -9,7 +8,6 @@ import ua.app.classroom.util.SendMessage;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Named
 @SessionScoped
@@ -36,30 +34,27 @@ public class RegistrationService implements Serializable {
     }
 
     private boolean checkAndAddToDB() {
-        UserDB userDB = (UserDB) Objects.requireNonNull(ContextLoader.getCurrentWebApplicationContext()).getBean("userDB");
         user.setFullName(user.getFullName().trim());
         if (SendMessage.loginOrPasswordIsEmpty(user, password)) {
             return true;
         }
-        if (userDB.userIsExist(user)) {
+        if (UserDB.userIsExist(user)) {
             LOG.trace("Login is already taken");
             SendMessage.loginIsAlreadyTaken();
             return true;
         }
-        if (roleAdmin) {
+        if (isRoleAdmin()) {
             user.setRole("ROLE_ADMIN");
         }
-        userDB.addUserToDB(user, password);
+        UserDB.addUserToDB(user, password);
         resetFields();
         LOG.trace("Method registrationUser completed successfully");
         return false;
     }
 
     private void resetFields() {
-        roleAdmin = false;
-        user.setFullName("");
-        user.setRole("ROLE_USER");
-        password = "";
+        clearUser();
+        setPassword("");
     }
 
     public User getUser() {

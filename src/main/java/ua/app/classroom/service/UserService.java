@@ -19,6 +19,8 @@ import java.util.Collection;
 public class UserService implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(UserService.class);
+    private static final String REDIRECT_LOGIN = "/login?faces-redirect=true";
+    private static final String REDIRECT_MEMBERS = "/secure/user/members?faces-redirect=true";
 
     @Inject
     private UserMap userMap;
@@ -32,22 +34,22 @@ public class UserService implements Serializable {
         userMap.removeUser(user);
         webSocket.userDisconnected(user.getFullName());
         LOG.trace("Method logOut completed successfully");
-        return "/login?faces-redirect=true";
+        return REDIRECT_LOGIN;
     }
 
     public String login() {
         CustomDetailService customUserDetail = new CustomDetailService();
         customUserDetail = (CustomDetailService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        user = customUserDetail.getUser();
+        setUser(customUserDetail.getUser());
         userMap.addUserToMap(user);
         webSocket.userConnected(user.getFullName());
         LOG.trace("Method authorizeUser completed successfully");
-        return "/secure/user/members?faces-redirect=true";
+        return REDIRECT_MEMBERS;
     }
 
     public String errorLogin () {
         SendMessage.sendMessageWhenAuthorizeFailed();
-        return "/login?faces-redirect=true";
+        return REDIRECT_LOGIN;
     }
 
     public void handUpDown() {

@@ -21,7 +21,7 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
     @Column(name = "role")
-    private String role = "USER";
+    private String role = "ROLE_USER";
     @Transient
     private boolean handUp;
 

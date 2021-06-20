@@ -4,7 +4,6 @@ import ua.app.classroom.model.entity.User;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import java.util.Locale;
 
 public class SendMessage {
 
@@ -23,15 +22,6 @@ public class SendMessage {
     public static boolean chekLogin(String fullName) {
         if (fullName.trim().isEmpty()) {
             setErrorMessage("Login can't be empty");
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean checkRole(User user) {
-        user.setRole(user.getRole().toUpperCase(Locale.ROOT));
-        if (!user.getRole().equals("USER") && !user.getRole().equals("ADMIN")) {
-            setErrorMessage("Wrong role format must be USER or ADMIN ");
             return true;
         }
         return false;

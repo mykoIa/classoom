@@ -1,6 +1,5 @@
 package ua.app.classroom.service;
 
-import org.springframework.web.context.ContextLoader;
 import ua.app.classroom.db.UserDB;
 import ua.app.classroom.model.entity.User;
 import ua.app.classroom.util.SendMessage;
@@ -12,14 +11,13 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 @Named
 @SessionScoped
 public class AdminService implements Serializable {
 
-    public static final String REDIRECT_AFTER_SAVE = "user-list?faces-redirect=true";
-    private final UserDB userDB = (UserDB) Objects.requireNonNull(ContextLoader.getCurrentWebApplicationContext()).getBean("userDB");
+    private static final String REDIRECT_AFTER_SAVE = "user-list?faces-redirect=true";
+    private static final String REDIRECT_EDIT = "edit?faces-redirect=true";
 
     @Inject
     private WebSocketForAdmin webSocket;
@@ -30,34 +28,35 @@ public class AdminService implements Serializable {
     private boolean roleAdmin;
 
     public void deleteUser(User user) {
-        userDB.deleteUser(user);
+        UserDB.deleteUser(user);
         webSocket.userDeleted(user.getFullName());
     }
 
     public String edit(User user) {
         this.user = user;
-        fullName = user.getFullName();
+        setFullName(user.getFullName());
         if (user.getRole().equals("ROLE_ADMIN")) {
             setRoleAdmin(true);
         }
-        return "edit?faces-redirect=true";
+        return REDIRECT_EDIT;
     }
 
     public String save() {
-        if (SendMessage.chekLogin(fullName) || SendMessage.checkRole(user)) {
+        if (SendMessage.chekLogin(fullName)) {
             return "";
         }
-        if (roleAdmin) {
+        if (isRoleAdmin()) {
             user.setRole("ROLE_ADMIN");
         } else {
             user.setRole("ROLE_USER");
         }
-        if (user.getFullName().equals(fullName) || !userDB.userIsExistTest(fullName)) {
-            userDB.updateUser(user, fullName);
+        if (user.getFullName().equals(fullName) || !UserDB.userIsExistTest(fullName)) {
+            UserDB.updateUser(user, fullName);
         } else {
             SendMessage.loginIsAlreadyTaken();
             return "";
         }
+        setRoleAdmin(false);
         return REDIRECT_AFTER_SAVE;
     }
 
@@ -82,7 +81,7 @@ public class AdminService implements Serializable {
     }
 
     public Collection<User> getUserList() {
-        return userDB.getUserList();
+        return UserDB.getUserList();
     }
 
     public boolean isRoleAdmin() {

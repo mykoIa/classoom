@@ -10,13 +10,11 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
-import org.springframework.stereotype.Service;
 import ua.app.classroom.model.entity.User;
 import ua.app.classroom.util.Encoding;
 
 import java.util.List;
 
-@Service
 public class UserDB {
 
     private static final Logger LOG = Logger.getLogger(UserDB.class);
@@ -44,7 +42,7 @@ public class UserDB {
         }
     }
 
-    public void addUserToDB(User user, String password) {
+    public static void addUserToDB(User user, String password) {
         Session session = factory.openSession();
         try {
             session.beginTransaction();
@@ -58,7 +56,7 @@ public class UserDB {
         }
     }
 
-    public boolean userIsExist(User user) {
+    public static boolean userIsExist(User user) {
         Session session = factory.openSession();
         try {
             Criteria criteria = session.createCriteria(User.class);
@@ -71,7 +69,7 @@ public class UserDB {
         }
     }
 
-    public User userIsExist(String username) {
+    public static User userIsExist(String username) {
         Session session = factory.openSession();
         try {
             Criteria criteria = session.createCriteria(User.class);
@@ -84,7 +82,7 @@ public class UserDB {
         }
     }
 
-    public boolean userIsExistTest(String username) {
+    public static boolean userIsExistTest(String username) {
         Session session = factory.openSession();
         try {
             Criteria criteria = session.createCriteria(User.class);
@@ -97,7 +95,7 @@ public class UserDB {
         }
     }
 
-    public List<User> getUserList() {
+    public static List<User> getUserList() {
         Session session = factory.openSession();
         try {
             Criteria criteria = session.createCriteria(User.class);
@@ -108,7 +106,7 @@ public class UserDB {
         }
     }
 
-    public void deleteUser(User user) {
+    public static void deleteUser(User user) {
         Session session = factory.openSession();
         try {
             session.beginTransaction();
@@ -119,7 +117,7 @@ public class UserDB {
         }
     }
 
-    public void updateUser(User user, String fullName) {
+    public static void updateUser(User user, String fullName) {
             Session session = factory.openSession();
             Transaction tx = null;
             try {

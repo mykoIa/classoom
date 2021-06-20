@@ -23,8 +23,7 @@ import ua.app.classroom.websocket.WebSocketForAdmin;
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan(basePackages = "ua.app.classroom", excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {WebSocket.class, UserService.class, AdminService.class, WebSocketForAdmin.class})})
+@ComponentScan(basePackages = "ua.app.classroom.security")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
