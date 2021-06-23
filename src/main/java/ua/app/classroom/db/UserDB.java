@@ -3,12 +3,14 @@ package ua.app.classroom.db;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.SQLCriterion;
 import org.hibernate.service.ServiceRegistry;
 import ua.app.classroom.model.entity.User;
 import ua.app.classroom.util.Encoding;
@@ -59,10 +61,10 @@ public class UserDB {
     public static boolean userIsExist(String fullName) {
         Session session = factory.openSession();
         try {
-            Criteria criteria = session.createCriteria(User.class);
-            criteria.add(Restrictions.eq("fullName", fullName));
+            Query query = session.createQuery("select count(id) from User where full_name=:fullName");
+            query.setString("fullName", fullName);
             LOG.trace("Method findUserByName completed successfully");
-            return criteria.uniqueResult() != null;
+            return (Long)query.uniqueResult() != 0;
         } finally {
             session.close();
         }
