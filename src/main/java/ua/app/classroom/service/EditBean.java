@@ -4,34 +4,21 @@ import ua.app.classroom.db.UserDB;
 import ua.app.classroom.model.entity.User;
 import ua.app.classroom.util.SendMessage;
 import ua.app.classroom.util.VerifyLoginAndPassword;
-import ua.app.classroom.websocket.WebSocketForAdmin;
 
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 
 @Named
 @SessionScoped
-public class AdminService implements Serializable {
+public class EditBean implements Serializable {
 
-    private static final String REDIRECT_AFTER_SAVE = "userList";
-    private static final String REDIRECT_EDIT = "edit";
+    private static final String REDIRECT_AFTER_SAVE = "userList?faces-redirect=true";
+    private static final String REDIRECT_EDIT = "edit?faces-redirect=true";
 
-    @Inject
-    private WebSocketForAdmin webSocket;
-
-    private List<User> userList;
     private User user = new User();
     private String fullName;
     private boolean roleAdmin;
-
-    public void deleteUser(User user) {
-        UserDB.deleteUser(user);
-        webSocket.userDeleted(user.getFullName());
-    }
 
     public String edit(User user) {
         this.user = user;
@@ -79,10 +66,6 @@ public class AdminService implements Serializable {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public Collection<User> getUserList() {
-        return UserDB.getUserList();
     }
 
     public boolean isRoleAdmin() {

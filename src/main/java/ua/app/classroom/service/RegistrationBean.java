@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 @Named
 @SessionScoped
-public class RegistrationService implements Serializable {
+public class RegistrationBean implements Serializable {
 
     public static final String LOGIN_FACES_REDIRECT_TRUE = "login?faces-redirect=true";
     private static final Logger LOG = Logger.getLogger(UserService.class);

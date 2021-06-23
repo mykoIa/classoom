@@ -14,7 +14,7 @@
     </ui:insert>
 
     <div class="ui-g">
-        <p:dataTable id="usersTableAdmin" var="user" value="#{adminService.userList}"
+        <p:dataTable id="usersTableAdmin" var="user" value="#{userListBean.userList}"
                      styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
             <p:column headerText="All Users">
                 <h:outputText value="#{user.fullName}"/>
@@ -23,10 +23,10 @@
                 <h:outputText value="#{user.role}"/>
             </p:column>
             <p:column width="47">
-                <p:commandButton action = "#{adminService.edit(user)}" value="Edit"/>
+                <p:commandButton action = "#{editBean.edit(user)}" value="Edit"/>
             </p:column>
             <p:column width="67">
-                <p:commandButton action="#{adminService.deleteUser(user)}"  value="Delete" styleClass="ui-button-danger" />
+                <p:commandButton action="#{userListBean.deleteUser(user)}"  value="Delete" styleClass="ui-button-danger" />
             </p:column>
         </p:dataTable>
         <p:commandButton value="Add new user" icon="pi pi-fw pi-plus" action="addUser?faces-redirect=true"/>

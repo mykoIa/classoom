@@ -15,13 +15,13 @@
         <p:growl id="msg" for="loginMsg" showDetail="true"/>
         <p:outputLabel value="User name:"
                        styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
-        <p:inputText value="#{adminService.fullName}"
+        <p:inputText value="#{editBean.fullName}"
                      styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
         <p:outputLabel value="Role Admin:"
                        styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
-        <p:selectBooleanCheckbox value="#{adminService.roleAdmin}"/>
+        <p:selectBooleanCheckbox value="#{editBean.roleAdmin}"/>
         <div class="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
-            <p:commandButton value="Save" update="msg" action="#{adminService.save()}"/>
+            <p:commandButton value="Save" update="msg" action="#{editBean.save()}"/>
             <p:commandButton value="User list" update="msg" action="userList?faces-redirect=true"/>
         </div>
     </h:form>
