@@ -17,18 +17,18 @@
         <p:growl id="msg" for="loginMsg" showDetail="true"/>
         <p:outputLabel value="User name:"
                        styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
-        <p:inputText value="#{registrationService.user.fullName}"
+        <p:inputText value="#{addUserBean.user.fullName}"
                      styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
         <p:outputLabel value="Password:"
                        styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
-        <p:password id="toggle" value="#{registrationService.password}" toggleMask="true" redisplay="true"
+        <p:password id="toggle" value="#{addUserBean.password}" toggleMask="true" redisplay="true"
                     styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
         <p:outputLabel value="Role Admin:"
                        styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4"/>
-        <p:selectBooleanCheckbox value="#{registrationService.roleAdmin}"/>
+        <p:selectBooleanCheckbox value="#{addUserBean.roleAdmin}"/>
         <div class="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
-            <p:commandButton value="Save" update="msg" action="#{registrationService.addUserToList()}"/>
-            <p:commandButton value="User list" update="msg" action="user-list?faces-redirect=true"/>
+            <p:commandButton value="Save" update="msg" action="#{addUserBean.addUserToDB()}"/>
+            <p:commandButton value="User list" update="msg" action="userList?faces-redirect=true"/>
         </div>
     </h:form>
 

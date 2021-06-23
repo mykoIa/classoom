@@ -1,30 +1,17 @@
 package ua.app.classroom.util;
 
-import ua.app.classroom.model.entity.User;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 public class SendMessage {
 
-    public static boolean loginOrPasswordIsEmpty(User user, String password) {
-        if (user.getFullName().isEmpty()) {
-            setErrorMessage("Login can't be empty");
-            return true;
-        }
-        if (password.isEmpty()) {
-            setErrorMessage("Password can't be empty");
-            return true;
-        }
-        return false;
+    public static void loginIsEmpty() {
+        setErrorMessage("Login can't be empty");
     }
 
-    public static boolean chekLogin(String fullName) {
-        if (fullName.trim().isEmpty()) {
-            setErrorMessage("Login can't be empty");
-            return true;
-        }
-        return false;
+    public static void passwordIsEmpty() {
+        setErrorMessage("Password can't be empty");
+
     }
 
     public static void loginIsAlreadyTaken() {

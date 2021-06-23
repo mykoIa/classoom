@@ -56,20 +56,19 @@ public class UserDB {
         }
     }
 
-    public static boolean userIsExist(User user) {
+    public static boolean userIsExist(String fullName) {
         Session session = factory.openSession();
         try {
             Criteria criteria = session.createCriteria(User.class);
-            criteria.add(Restrictions.eq("fullName", user.getFullName()));
-            User userDB = (User) criteria.uniqueResult();
+            criteria.add(Restrictions.eq("fullName", fullName));
             LOG.trace("Method findUserByName completed successfully");
-            return userDB != null;
+            return criteria.uniqueResult() != null;
         } finally {
             session.close();
         }
     }
 
-    public static User userIsExist(String username) {
+    public static User getUserByName(String username) {
         Session session = factory.openSession();
         try {
             Criteria criteria = session.createCriteria(User.class);
@@ -77,19 +76,6 @@ public class UserDB {
             User userDB = (User) criteria.uniqueResult();
             LOG.trace("Method findUserByName completed successfully");
             return userDB;
-        } finally {
-            session.close();
-        }
-    }
-
-    public static boolean userIsExistTest(String username) {
-        Session session = factory.openSession();
-        try {
-            Criteria criteria = session.createCriteria(User.class);
-            criteria.add(Restrictions.eq("fullName", username));
-            User userDB = (User) criteria.uniqueResult();
-            LOG.trace("Method findUserByName completed successfully");
-            return userDB != null;
         } finally {
             session.close();
         }
@@ -118,25 +104,25 @@ public class UserDB {
     }
 
     public static void updateUser(User user, String fullName) {
-            Session session = factory.openSession();
-            Transaction tx = null;
-            try {
-                tx = session.beginTransaction();
-                Criteria criteria = session.createCriteria(User.class);
-                criteria.add(Restrictions.eq("fullName", user.getFullName()));
-                User e = (User) criteria.uniqueResult();
-                e.setFullName(fullName);
-                e.setRole(user.getRole());
-                session.saveOrUpdate(e);
-                tx.commit();
-                LOG.trace("Method updateUser completed successfully");
-            } catch (HibernateException e) {
-                if (tx != null) {
-                    tx.rollback();
-                }
-                LOG.debug("Exception in updateUser: ", e);
-            } finally {
-                session.close();
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Criteria criteria = session.createCriteria(User.class);
+            criteria.add(Restrictions.eq("fullName", user.getFullName()));
+            User e = (User) criteria.uniqueResult();
+            e.setFullName(fullName);
+            e.setRole(user.getRole());
+            session.saveOrUpdate(e);
+            tx.commit();
+            LOG.trace("Method updateUser completed successfully");
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
             }
+            LOG.debug("Exception in updateUser: ", e);
+        } finally {
+            session.close();
         }
+    }
 }

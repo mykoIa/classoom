@@ -12,15 +12,15 @@ import java.io.Serializable;
 
 @Named
 @SessionScoped
-public class RegistrationService implements Serializable {
-
-    public static final String LOGIN_FACES_REDIRECT_TRUE = "login?faces-redirect=true";
+public class AddUserBean implements Serializable {
+    public static final String USER_LIST_REDIRECT_TRUE = "userList?faces-redirect=true";
     private static final Logger LOG = Logger.getLogger(UserService.class);
 
     User user = new User();
     private String password;
+    private boolean roleAdmin;
 
-    public String registration() {
+    public String addUserToDB() {
         user.setFullName(user.getFullName().trim());
         if (VerifyLoginAndPassword.loginOrPasswordIsEmpty(user, password)) {
             return "";
@@ -30,10 +30,13 @@ public class RegistrationService implements Serializable {
             SendMessage.loginIsAlreadyTaken();
             return "";
         }
+        if (isRoleAdmin()) {
+            user.setRole("ROLE_ADMIN");
+        }
         UserDB.addUserToDB(user, password);
         resetFields();
         LOG.trace("Method registrationUser completed successfully");
-        return LOGIN_FACES_REDIRECT_TRUE;
+        return USER_LIST_REDIRECT_TRUE;
     }
 
     private void resetFields() {
@@ -60,4 +63,13 @@ public class RegistrationService implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public boolean isRoleAdmin() {
+        return roleAdmin;
+    }
+
+    public void setRoleAdmin(boolean roleAdmin) {
+        this.roleAdmin = roleAdmin;
+    }
 }
+

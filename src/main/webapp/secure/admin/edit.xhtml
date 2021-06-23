@@ -22,7 +22,7 @@
         <p:selectBooleanCheckbox value="#{adminService.roleAdmin}"/>
         <div class="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
             <p:commandButton value="Save" update="msg" action="#{adminService.save()}"/>
-            <p:commandButton value="User list" update="msg" action="user-list?faces-redirect=true"/>
+            <p:commandButton value="User list" update="msg" action="userList?faces-redirect=true"/>
         </div>
     </h:form>
     <h:outputScript library="js" name="script.js"/>

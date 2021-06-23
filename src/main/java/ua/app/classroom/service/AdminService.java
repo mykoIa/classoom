@@ -3,6 +3,7 @@ package ua.app.classroom.service;
 import ua.app.classroom.db.UserDB;
 import ua.app.classroom.model.entity.User;
 import ua.app.classroom.util.SendMessage;
+import ua.app.classroom.util.VerifyLoginAndPassword;
 import ua.app.classroom.websocket.WebSocketForAdmin;
 
 import javax.enterprise.context.SessionScoped;
@@ -16,8 +17,8 @@ import java.util.List;
 @SessionScoped
 public class AdminService implements Serializable {
 
-    private static final String REDIRECT_AFTER_SAVE = "user-list?faces-redirect=true";
-    private static final String REDIRECT_EDIT = "edit?faces-redirect=true";
+    private static final String REDIRECT_AFTER_SAVE = "userList";
+    private static final String REDIRECT_EDIT = "edit";
 
     @Inject
     private WebSocketForAdmin webSocket;
@@ -42,7 +43,7 @@ public class AdminService implements Serializable {
     }
 
     public String save() {
-        if (SendMessage.chekLogin(fullName)) {
+        if (VerifyLoginAndPassword.loginIsEmpty(fullName)) {
             return "";
         }
         if (isRoleAdmin()) {
@@ -50,7 +51,7 @@ public class AdminService implements Serializable {
         } else {
             user.setRole("ROLE_USER");
         }
-        if (user.getFullName().equals(fullName) || !UserDB.userIsExistTest(fullName)) {
+        if (user.getFullName().equals(fullName) || !UserDB.userIsExist(fullName)) {
             UserDB.updateUser(user, fullName);
         } else {
             SendMessage.loginIsAlreadyTaken();
