@@ -14,7 +14,7 @@
 
     <p:growl widgetVar="globalMessage"/>
     <div class="ui-g">
-        <p:dataTable id="usersTable" var="user" value="#{userService.userList}"
+        <p:dataTable id="usersTable" var="user" value="#{membersBean.userList}"
                      styleClass="ui-g-offset-2 ui-g-8 ui-md-offset-3 ui-md-6 ui-lg-offset-4 ui-lg-4">
             <p:column headerText="Class members">
                 <h:outputText value="#{user.fullName}"/>

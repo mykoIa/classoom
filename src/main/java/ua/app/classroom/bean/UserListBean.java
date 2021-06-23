@@ -1,4 +1,4 @@
-package ua.app.classroom.service;
+package ua.app.classroom.bean;
 
 import ua.app.classroom.db.UserDB;
 import ua.app.classroom.model.entity.User;

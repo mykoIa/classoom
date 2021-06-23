@@ -1,4 +1,4 @@
-package ua.app.classroom.service;
+package ua.app.classroom.bean;
 
 import ua.app.classroom.db.UserDB;
 import ua.app.classroom.model.entity.User;
@@ -21,7 +21,7 @@ public class EditBean implements Serializable {
     private boolean roleAdmin;
 
     public String edit(User user) {
-        this.user = user;
+        setUser(user);
         setFullName(user.getFullName());
         if (user.getRole().equals("ROLE_ADMIN")) {
             setRoleAdmin(true);

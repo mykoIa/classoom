@@ -1,4 +1,4 @@
-package ua.app.classroom.service;
+package ua.app.classroom.bean;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,13 +12,12 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Collection;
 
 @Named
 @SessionScoped
-public class UserService implements Serializable {
+public class LoginLogoutBean implements Serializable {
 
-    private static final Logger LOG = Logger.getLogger(UserService.class);
+    private static final Logger LOG = Logger.getLogger(LoginLogoutBean.class);
     private static final String REDIRECT_LOGIN = "/login?faces-redirect=true";
     private static final String REDIRECT_MEMBERS = "/secure/user/members?faces-redirect=true";
 
@@ -38,8 +37,7 @@ public class UserService implements Serializable {
     }
 
     public String login() {
-        CustomDetailService customUserDetail = new CustomDetailService();
-        customUserDetail = (CustomDetailService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomDetailService customUserDetail = (CustomDetailService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         setUser(customUserDetail.getUser());
         userMap.addUserToMap(user);
         webSocket.userConnected(user.getFullName());
@@ -47,18 +45,9 @@ public class UserService implements Serializable {
         return REDIRECT_MEMBERS;
     }
 
-    public String errorLogin () {
+    public String errorLogin() {
         SendMessage.sendMessageWhenAuthorizeFailed();
         return REDIRECT_LOGIN;
-    }
-
-    public void handUpDown() {
-        user.setHandUp(!user.isHandUp());
-        if (user.isHandUp()) {
-            webSocket.userHandUp(user.getFullName());
-        } else {
-            webSocket.userHandDown(user.getFullName());
-        }
     }
 
     public User getUser() {
@@ -71,13 +60,5 @@ public class UserService implements Serializable {
 
     public void clearUser() {
         this.user = new User();
-    }
-
-    public Collection<User> getUserList() {
-        return userMap.getUserList();
-    }
-
-    public void setUserMap(UserMap userMap) {
-        this.userMap = userMap;
     }
 }

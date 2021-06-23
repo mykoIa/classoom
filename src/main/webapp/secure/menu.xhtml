@@ -11,14 +11,14 @@
         <h:form id="navbar">
             <p:menubar>
                 <p:submenu label="Action">
-                    <p:menuitem value="#{userService.user.handUp ? 'Raise hand down' : 'Raise hand up'}"
-                                actionListener="#{userService.handUpDown}" update="navbar"/>
+                    <p:menuitem value="#{menuBean.user.handUp ? 'Raise hand down' : 'Raise hand up'}"
+                                actionListener="#{menuBean.handUpDown}" update="navbar"/>
                 </p:submenu>
-                <p:submenu label="#{userService.user.fullName}" icon="pi pi-fw pi-user" style="float: right;">
+                <p:submenu label="#{menuBean.user.fullName}" icon="pi pi-fw pi-user" style="float: right;">
                     <p:menuitem value="Members" icon="pi pi-fw pi-users"
                                 action="/secure/user/members.xhtml?faces-redirect=true"/>
                     <p:menuitem value="Admin menu" icon="pi pi-fw pi-lock" action="/secure/admin/userList.xhtml?faces-redirect=true"
-                                rendered="#{userService.user.role =='ROLE_ADMIN'}"/>
+                                rendered="#{menuBean.user.role =='ROLE_ADMIN'}"/>
                     <p:menuitem value="Logout" icon="pi pi-fw pi-sign-out" selectionMode="multiple" class="hider"
                                 onclick="triggerButton1Click()"/>
                 </p:submenu>

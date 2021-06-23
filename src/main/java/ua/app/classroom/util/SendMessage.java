@@ -11,7 +11,6 @@ public class SendMessage {
 
     public static void passwordIsEmpty() {
         setErrorMessage("Password can't be empty");
-
     }
 
     public static void loginIsAlreadyTaken() {
