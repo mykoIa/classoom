@@ -10,7 +10,6 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.SQLCriterion;
 import org.hibernate.service.ServiceRegistry;
 import ua.app.classroom.model.entity.User;
 import ua.app.classroom.util.Encoding;
@@ -64,7 +63,7 @@ public class UserDB {
             Query query = session.createQuery("select count(id) from User where full_name=:fullName");
             query.setString("fullName", fullName);
             LOG.trace("Method findUserByName completed successfully");
-            return (Long)query.uniqueResult() != 0;
+            return (Long) query.uniqueResult() != 0;
         } finally {
             session.close();
         }
