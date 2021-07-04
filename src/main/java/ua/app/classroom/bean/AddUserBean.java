@@ -6,12 +6,12 @@ import ua.app.classroom.model.entity.User;
 import ua.app.classroom.util.SendMessage;
 import ua.app.classroom.util.VerifyLoginAndPassword;
 
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 
 @Named
-@SessionScoped
+@RequestScoped
 public class AddUserBean implements Serializable {
     public static final String USER_LIST_REDIRECT_TRUE = "userList?faces-redirect=true";
     private static final Logger LOG = Logger.getLogger(LoginLogoutBean.class);

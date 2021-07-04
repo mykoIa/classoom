@@ -1,28 +1,22 @@
 package ua.app.classroom.bean;
 
-import org.springframework.security.core.context.SecurityContextHolder;
+import ua.app.classroom.db.repository.CurrentUser;
 import ua.app.classroom.model.entity.User;
-import ua.app.classroom.security.CustomDetailService;
 import ua.app.classroom.websocket.WebSocket;
 
-import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class MenuBean implements Serializable {
 
     @Inject
     private WebSocket webSocket;
 
-    private User user = new User();
-
-    {
-        CustomDetailService customUserDetail = (CustomDetailService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        setUser(customUserDetail.getUser());
-    }
+    private User user = CurrentUser.getUser();
 
     public void handUpDown() {
         user.setHandUp(!user.isHandUp());

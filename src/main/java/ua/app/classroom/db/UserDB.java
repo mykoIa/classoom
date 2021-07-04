@@ -3,12 +3,12 @@ package ua.app.classroom.db;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.service.ServiceRegistry;
 import ua.app.classroom.model.entity.User;
@@ -60,10 +60,10 @@ public class UserDB {
     public static boolean userIsExist(String fullName) {
         Session session = factory.openSession();
         try {
-            Query query = session.createQuery("select count(id) from User where full_name=:fullName");
-            query.setString("fullName", fullName);
+            Criteria criteria = session.createCriteria(User.class);
+            criteria.setProjection(Projections.rowCount()).add(Restrictions.eq("fullName", fullName));
             LOG.trace("Method findUserByName completed successfully");
-            return (Long) query.uniqueResult() != 0;
+            return (Long) criteria.uniqueResult() != 0;
         } finally {
             session.close();
         }
@@ -85,9 +85,7 @@ public class UserDB {
     public static List<User> getUserList() {
         Session session = factory.openSession();
         try {
-            Criteria criteria = session.createCriteria(User.class);
-            criteria.add(Restrictions.gt("id", 0L));
-            return criteria.list();
+            return session.createCriteria(User.class).list();
         } finally {
             session.close();
         }

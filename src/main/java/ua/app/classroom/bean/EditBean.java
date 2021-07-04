@@ -1,63 +1,41 @@
 package ua.app.classroom.bean;
 
 import ua.app.classroom.db.UserDB;
-import ua.app.classroom.model.entity.User;
+import ua.app.classroom.db.repository.SelectedUser;
 import ua.app.classroom.util.SendMessage;
 import ua.app.classroom.util.VerifyLoginAndPassword;
 
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 
 @Named
-@SessionScoped
+@RequestScoped
 public class EditBean implements Serializable {
 
     private static final String REDIRECT_AFTER_SAVE = "userList?faces-redirect=true";
-    private static final String REDIRECT_EDIT = "edit?faces-redirect=true";
 
-    private User user = new User();
-    private String fullName;
-    private boolean roleAdmin;
-
-    public String edit(User user) {
-        setUser(user);
-        setFullName(user.getFullName());
-        if (user.getRole().equals("ROLE_ADMIN")) {
-            setRoleAdmin(true);
-        }
-        return REDIRECT_EDIT;
-    }
+    private String fullName = SelectedUser.getFullName();
+    private boolean roleAdmin = SelectedUser.isRoleAdmin();
 
     public String save() {
-        if (VerifyLoginAndPassword.loginIsEmpty(fullName)) {
+        if (VerifyLoginAndPassword.loginIsEmpty(SelectedUser.getFullName())) {
             return "";
         }
         if (isRoleAdmin()) {
-            user.setRole("ROLE_ADMIN");
+            SelectedUser.getUser().setRole("ROLE_ADMIN");
         } else {
-            user.setRole("ROLE_USER");
+            SelectedUser.getUser().setRole("ROLE_USER");
         }
-        if (user.getFullName().equals(fullName) || !UserDB.userIsExist(fullName)) {
-            UserDB.updateUser(user, fullName);
+        if (SelectedUser.getUser().getFullName().equals(SelectedUser.getFullName()) || !UserDB.userIsExist(SelectedUser.getFullName())) {
+            UserDB.updateUser(SelectedUser.getUser(), fullName);
         } else {
             SendMessage.loginIsAlreadyTaken();
             return "";
         }
-        setRoleAdmin(false);
+        SelectedUser.setRoleAdmin(false);
+        SelectedUser.clear();
         return REDIRECT_AFTER_SAVE;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void clearUser() {
-        this.user = new User();
     }
 
     public String getFullName() {
